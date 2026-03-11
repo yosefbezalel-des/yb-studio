@@ -1,131 +1,165 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>YB Photos | Nature Photography</title>
-<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700&family=Assistant:wght@300;400;600&display=swap" rel="stylesheet">
-<style>
-/* עיצוב כללי משופר */
-:root {
-  --bg: #FAFAF8; --text-primary: #1A1A18; --accent: #2D5A3D;
-}
-body { 
-    font-family: 'Heebo', 'Assistant', sans-serif; 
-    background-color: var(--bg); 
-    color: var(--text-primary);
-    margin: 0;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YB Photos | Nature Photography</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700&family=Assistant:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* הגדרות עיצוב ופונטים חדשים */
+        :root {
+            --bg: #FAFAF8;
+            --accent: #2D5A3D;
+            --text: #1A1A18;
+        }
+        body { 
+            font-family: 'Heebo', sans-serif; 
+            background-color: var(--bg);
+            margin: 0;
+            color: var(--text);
+        }
 
-/* אנימציית לחיצה לכפתורים */
-button, .clickable {
-    transition: transform 0.1s ease;
-}
-button:active {
-    transform: scale(0.95);
-}
+        /* אנימציית לחיצה */
+        button, .clickable { transition: transform 0.1s ease; }
+        button:active { transform: scale(0.95); }
 
-/* כפתור הורדה מעוצב */
-.download-btn-fancy {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    background: var(--accent);
-    color: white;
-    padding: 12px 24px;
-    border-radius: 30px;
-    text-decoration: none;
-    font-weight: 600;
-    margin-top: 15px;
-    box-shadow: 0 4px 15px rgba(45, 90, 61, 0.3);
-}
+        /* אזור גרירת קבצים מעוצב */
+        .drop-zone {
+            border: 2px dashed #ccc;
+            padding: 40px;
+            text-align: center;
+            border-radius: 15px;
+            cursor: pointer;
+            background: #fff;
+            transition: all 0.3s;
+            margin-bottom: 20px;
+        }
+        .drop-zone.over {
+            border-color: var(--accent);
+            background: #f0f7f2;
+        }
 
-/* אזור גרירת קבצים */
-.drop-zone {
-    border: 2px dashed #ccc;
-    padding: 20px;
-    text-align: center;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background 0.3s;
-}
-.drop-zone.over {
-    background: #e1e1e1;
-    border-color: var(--accent);
-}
+        /* כפתור הורדה משודרג */
+        .full-res-download {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--accent);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(45, 90, 61, 0.3);
+            margin-top: 20px;
+        }
 
-/* אנימציית טעינה */
-.spinner {
-    border: 3px solid rgba(255,255,255,0.3);
-    border-radius: 50%;
-    border-top: 3px solid #fff;
-    width: 18px;
-    height: 18px;
-    animation: spin 1s linear infinite;
-    display: inline-block;
-    vertical-align: middle;
-    margin-left: 8px;
-}
-@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-</style>
+        /* ספינר טעינה */
+        .spinner {
+            width: 18px; height: 18px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top: 2px solid #fff;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 8px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
 </head>
 <body>
 
-<script>
-// --- לוגיקה חדשה לקטגוריות ---
-async function handleCategoryChange(select) {
-    if (select.value === 'NEW_CAT') {
-        const newCat = prompt("הכנס שם לקטגוריה החדשה:");
-        if (newCat) {
-            const option = document.createElement("option");
-            option.value = newCat;
-            option.text = newCat;
-            select.add(option, select.options[select.options.length - 1]);
-            select.value = newCat;
-        } else {
-            select.selectedIndex = 0;
+    <script>
+    // לוגיקת הוספת קטגוריה חדשה תוך כדי תנועה
+    function checkNewCategory(select) {
+        if (select.value === 'ADD_NEW') {
+            const newName = prompt("הזן שם לקטגוריה החדשה:");
+            if (newName && newName.trim() !== "") {
+                const opt = document.createElement('option');
+                opt.value = newName;
+                opt.text = newName;
+                select.add(opt, select.options[select.options.length - 1]);
+                select.value = newName;
+            } else {
+                select.selectedIndex = 0;
+            }
         }
     }
-}
 
-// --- לוגיקה ל-Drag & Drop ---
-function initDragDrop() {
-    const zone = document.getElementById('dropZone');
-    if(!zone) return;
-    ['dragover', 'dragleave', 'drop'].forEach(name => {
-        zone.addEventListener(name, e => {
+    // פונקציית העלאה משולבת עם התוסף והלואדר
+    window._upload = async function() {
+        const fileInput = document.getElementById('fileInput');
+        const catSelect = document.getElementById('photoCat');
+        const btn = document.getElementById('uploadBtn');
+        
+        if (!fileInput.files[0]) return alert('בחר קובץ');
+        
+        // שלב 6: חיווי טעינה
+        const originalText = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner"></span> שומר תמונה...';
+
+        const file = fileInput.files[0];
+        const storageRef = storage.ref('photos/' + Date.now() + '_' + file.name);
+
+        try {
+            const snapshot = await storageRef.put(file);
+            const url = await snapshot.ref.getDownloadURL();
+
+            // שלב 1: המתנה לתוסף (Thumbnail)
+            const extension = file.name.split('.').pop();
+            const thumbName = file.name.replace('.' + extension, '_400x400.' + extension);
+            const thumbPath = 'photos/' + storageRef.name.split('_')[0] + '_' + thumbName;
+
+            // מחכים 3 שניות ליצירת הגרסה המוקטנת
+            setTimeout(async () => {
+                let thumbUrl = url;
+                try {
+                    thumbUrl = await storage.ref(thumbPath).getDownloadURL();
+                } catch(e) { console.log("Thumbnail still processing..."); }
+
+                await db.collection('photos').add({
+                    src: url,
+                    src_thumb: thumbUrl,
+                    category: catSelect.value,
+                    timestamp: Date.now()
+                });
+
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+                alert('הועלה בהצלחה!');
+                location.reload();
+            }, 3500);
+
+        } catch (error) {
+            console.error(error);
+            btn.disabled = false;
+            btn.innerHTML = originalText;
+        }
+    };
+
+    // הגדרת גרירת קבצים
+    function initDropZone() {
+        const zone = document.getElementById('dropZone');
+        if (!zone) return;
+        zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.classList.add('over'); });
+        zone.addEventListener('dragleave', () => zone.classList.remove('over'));
+        zone.addEventListener('drop', (e) => {
             e.preventDefault();
-            zone.classList.toggle('over', name === 'dragover');
+            zone.classList.remove('over');
+            document.getElementById('fileInput').files = e.dataTransfer.files;
+            zone.innerHTML = 'קובץ נבחר: ' + e.dataTransfer.files[0].name;
         });
+    }
+
+    // עדכון שנה וקרדיט אוטומטי
+    document.addEventListener('DOMContentLoaded', () => {
+        const footer = document.querySelector('footer p');
+        if (footer) footer.innerHTML = '© כל הזכויות שמורות ל-YB Studio 2026';
+        initDropZone();
     });
-    zone.addEventListener('drop', e => {
-        const file = e.dataTransfer.files[0];
-        if(file) document.getElementById('fileInput').files = e.dataTransfer.files;
-    });
-}
-
-// --- פונקציית העלאה מעודכנת עם לואדר ---
-window._upload = async function() {
-    const btn = document.getElementById('uploadBtn');
-    const originalText = btn.innerHTML;
-    
-    // הפעלת לואדר
-    btn.disabled = true;
-    btn.innerHTML = '<span class="spinner"></span> מעלה...';
-
-    // ... כאן נכנס הקוד של Firebase (העלאה + המתנה ל-Thumbnail כפי שסידרנו קודם) ...
-    
-    // בסיום:
-    // btn.disabled = false;
-    // btn.innerHTML = originalText;
-};
-
-// עדכון פוטר
-document.addEventListener('DOMContentLoaded', () => {
-    const footer = document.querySelector('footer p');
-    if(footer) footer.innerHTML = '© כל הזכויות שמורות ל-YB Studio 2026';
-    initDragDrop();
-});
 </script>
 </body>
 </html>
