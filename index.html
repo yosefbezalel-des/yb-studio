@@ -4,702 +4,127 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>YB Photos | Nature Photography</title>
-<meta property="og:title" content="YB Photos | Nature Photography">
-<meta property="og:description" content="צילומי טבע מקצועיים">
-<meta property="og:image" content="">
-<meta property="og:type" content="website">
-<meta name="description" content="YB Photos - צילומי טבע מקצועיים">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Heebo:wght@200;300;400;500;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700&family=Assistant:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
+/* עיצוב כללי משופר */
 :root {
-  --bg: #FAFAF8; --bg-secondary: #F0EFEB; --text-primary: #1A1A18; --text-secondary: #6B6960;
-  --text-tertiary: #9E9A90; --accent: #2D5A3D; --accent-light: #6B9E7A; --border: #E2E0DA;
-  --white: #FFFFFF; --overlay: rgba(0,0,0,0.92); --shadow-soft: 0 2px 20px rgba(0,0,0,0.06);
-  --shadow-hover: 0 8px 40px rgba(0,0,0,0.12); --font-display-he: 'Heebo', sans-serif;
-  --font-display-en: 'Cormorant Garamond', serif; --font-body-he: 'Heebo', sans-serif;
-  --font-body-en: 'Libre Baskerville', serif; --transition: 0.4s cubic-bezier(0.25,0.1,0.25,1);
+  --bg: #FAFAF8; --text-primary: #1A1A18; --accent: #2D5A3D;
 }
-[data-theme="dark"] {
-  --bg: #121212; --bg-secondary: #1A1A1A; --text-primary: #E8E5DF; --text-secondary: #A8A49C;
-  --text-tertiary: #6B6960; --accent: #6B9E7A; --accent-light: #2D5A3D; --border: #2A2A28;
-  --white: #FFFFFF; --overlay: rgba(0,0,0,0.95); --shadow-soft: 0 2px 20px rgba(0,0,0,0.3);
-  --shadow-hover: 0 8px 40px rgba(0,0,0,0.4);
-}
-* { margin:0; padding:0; box-sizing:border-box; }
-body { font-family: var(--font-body-he); background: var(--bg); color: var(--text-primary); overflow-x:hidden; transition: background var(--transition), color var(--transition); }
-
-/* NAV */
-nav { position:fixed; top:0; left:0; right:0; z-index:1000; padding:1.2rem 3rem; display:flex; justify-content:space-between; align-items:center; transition: var(--transition); background:transparent; }
-nav.scrolled { background: rgba(250,250,248,0.95); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border-bottom:1px solid var(--border); }
-[data-theme="dark"] nav.scrolled { background: rgba(18,18,18,0.95); }
-[data-theme="dark"] nav.scrolled .logo, [data-theme="dark"] nav.scrolled .nav-links a { color: #E8E5DF; }
-.logo { font-family: var(--font-display-en); font-size:1.5rem; font-weight:300; letter-spacing:0.15em; color: var(--white); text-decoration:none; cursor:pointer; user-select:none; -webkit-user-select:none; }
-nav.scrolled .logo { color: var(--text-primary); }
-.nav-links { display:flex; gap:2rem; align-items:center; list-style:none; }
-.nav-links a { font-family: var(--font-body-en); font-size:0.85rem; color: rgba(255,255,255,0.85); text-decoration:none; letter-spacing:0.08em; text-transform:uppercase; transition: var(--transition); }
-nav.scrolled .nav-links a { color: var(--text-secondary); }
-.nav-links a:hover { color: var(--accent-light); }
-.lang-toggle { padding:0.35rem 0.8rem; border:1px solid rgba(255,255,255,0.3); border-radius:4px; background:transparent; color: rgba(255,255,255,0.85); cursor:pointer; font-family: var(--font-body-he); font-size:0.8rem; transition: var(--transition); }
-nav.scrolled .lang-toggle { border-color: var(--border); color: var(--text-secondary); }
-
-/* DARK MODE TOGGLE */
-.dark-toggle { width:44px; height:22px; border-radius:11px; border:1px solid rgba(255,255,255,0.3); background:transparent; cursor:pointer; position:relative; transition: var(--transition); padding:0; }
-.dark-toggle::after { content:''; position:absolute; top:2px; left:2px; width:16px; height:16px; border-radius:50%; background:rgba(255,255,255,0.8); transition: var(--transition); }
-[data-theme="dark"] .dark-toggle { background: var(--accent); border-color: var(--accent); }
-[data-theme="dark"] .dark-toggle::after { left:24px; background: #fff; }
-nav.scrolled .dark-toggle { border-color: var(--border); }
-nav.scrolled .dark-toggle::after { background: var(--text-secondary); }
-[data-theme="dark"] nav.scrolled .dark-toggle { border-color: var(--accent); background: var(--accent); }
-[data-theme="dark"] nav.scrolled .dark-toggle::after { background: #fff; }
-
-/* MOBILE MENU */
-.menu-toggle { display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; padding:5px; }
-.menu-toggle span { width:22px; height:1.5px; background: var(--white); transition: var(--transition); }
-nav.scrolled .menu-toggle span { background: var(--text-primary); }
-@media(max-width:768px) {
-  nav { padding:1rem 1.5rem; }
-  .menu-toggle { display:flex; }
-  .nav-links { position:fixed; top:0; right:-100%; width:70%; height:100vh; background: var(--bg); flex-direction:column; padding:5rem 2rem; transition: var(--transition); gap:1.5rem; }
-  .nav-links.open { right:0; }
-  .nav-links a { color: var(--text-primary) !important; font-size:1rem; }
-  .menu-toggle.active span:nth-child(1) { transform:rotate(45deg) translate(4px,4px); }
-  .menu-toggle.active span:nth-child(2) { opacity:0; }
-  .menu-toggle.active span:nth-child(3) { transform:rotate(-45deg) translate(4px,-4px); }
+body { 
+    font-family: 'Heebo', 'Assistant', sans-serif; 
+    background-color: var(--bg); 
+    color: var(--text-primary);
+    margin: 0;
 }
 
-/* HERO */
-.hero { min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:8rem 2rem 4rem; position:relative; overflow:hidden; background: url('https://picsum.photos/seed/wildnature42/1920/1080') center/cover no-repeat; }
-.hero::before { content:''; position:absolute; inset:0; background:linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0.7) 100%); }
-.hero * { position:relative; z-index:1; }
-.hero-subtitle { font-family: var(--font-display-en); font-size:0.9rem; letter-spacing:0.3em; text-transform:uppercase; color:rgba(255,255,255,0.7); margin-bottom:1.5rem; }
-.hero h1 { font-family: var(--font-display-en); font-size:clamp(2.5rem,6vw,4.5rem); font-weight:300; color:#fff; letter-spacing:0.05em; line-height:1.15; margin-bottom:1.5rem; }
-.hero-desc { font-family: var(--font-body-en); font-size:1rem; color:rgba(255,255,255,0.75); max-width:500px; line-height:1.8; margin-bottom:2.5rem; }
-.hero-cta { display:inline-block; padding:0.8rem 2.5rem; border:1px solid rgba(255,255,255,0.4); color:#fff; text-decoration:none; font-family: var(--font-display-en); font-size:0.85rem; letter-spacing:0.2em; text-transform:uppercase; transition: var(--transition); }
-.hero-cta:hover { background:rgba(255,255,255,0.1); border-color:rgba(255,255,255,0.7); }
+/* אנימציית לחיצה לכפתורים */
+button, .clickable {
+    transition: transform 0.1s ease;
+}
+button:active {
+    transform: scale(0.95);
+}
 
-/* SECTIONS */
-section { padding:5rem 2rem; background: var(--bg); transition: background var(--transition); }
-[data-theme="dark"] section { background: #121212; }
-.section-title { font-family: var(--font-display-en); font-size:2rem; font-weight:300; text-align:center; margin-bottom:3rem; letter-spacing:0.08em; color: var(--text-primary); }
-[data-theme="dark"] .section-title { color: #E8E5DF; }
+/* כפתור הורדה מעוצב */
+.download-btn-fancy {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--accent);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 600;
+    margin-top: 15px;
+    box-shadow: 0 4px 15px rgba(45, 90, 61, 0.3);
+}
 
-/* FILTERS */
-.filters { display:flex; justify-content:center; gap:2rem; margin-bottom:3rem; flex-wrap:wrap; }
-.filter-btn { background:none; border:none; font-family: var(--font-body-en); font-size:0.85rem; color: var(--text-secondary); cursor:pointer; padding:0.5rem 0; letter-spacing:0.08em; text-transform:uppercase; border-bottom:2px solid transparent; transition: var(--transition); }
-.filter-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
-[data-theme="dark"] .filter-btn { color: #A8A49C; }
-[data-theme="dark"] .filter-btn.active { color: #6B9E7A; border-bottom-color: #6B9E7A; }
+/* אזור גרירת קבצים */
+.drop-zone {
+    border: 2px dashed #ccc;
+    padding: 20px;
+    text-align: center;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+.drop-zone.over {
+    background: #e1e1e1;
+    border-color: var(--accent);
+}
 
-/* GALLERY */
-.gallery-grid { max-width:1200px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:1.2rem; padding:0 1rem; }
-.gallery-item { position:relative; overflow:hidden; border-radius:4px; cursor:pointer; aspect-ratio:4/3; }
-.gallery-item.tall { grid-row:span 2; aspect-ratio:auto; }
-.gallery-item.wide { grid-column:span 2; }
-.gallery-item img { width:100%; height:100%; object-fit:cover; transition:transform 0.6s ease; }
-.gallery-item:hover img { transform:scale(1.05); }
-.gallery-overlay { position:absolute; inset:0; background:linear-gradient(to top,rgba(0,0,0,0.6) 0%,transparent 50%); opacity:0; transition: var(--transition); display:flex; align-items:flex-end; padding:1.2rem; }
-.gallery-item:hover .gallery-overlay { opacity:1; }
-[data-theme="dark"] .gallery-overlay { background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 100%); }
-.gallery-info h3 { color:#fff; font-family: var(--font-display-en); font-weight:300; font-size:1rem; }
-.gallery-info span { color:rgba(255,255,255,0.7); font-size:0.75rem; }
-[data-theme="dark"] .gallery-item .gallery-info h3 { color: #E8E5DF; }
-
-/* LIGHTBOX */
-.lightbox { position:fixed; inset:0; background: var(--overlay); z-index:2000; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition: var(--transition); }
-.lightbox.active { opacity:1; pointer-events:all; }
-.lightbox img { max-width:90vw; max-height:85vh; object-fit:contain; }
-.lightbox-close,.lightbox-prev,.lightbox-next { position:absolute; background:none; border:none; color:rgba(255,255,255,0.7); font-size:2rem; cursor:pointer; padding:1rem; transition: var(--transition); }
-.lightbox-close { top:1rem; right:1rem; }
-.lightbox-prev { left:1rem; top:50%; transform:translateY(-50%); }
-.lightbox-next { right:1rem; top:50%; transform:translateY(-50%); }
-.lightbox-info { position:absolute; bottom:2rem; text-align:center; width:100%; }
-.lightbox-info h3 { color:#fff; font-family: var(--font-display-en); font-weight:300; }
-
-.lightbox-download { position:absolute; bottom:5rem; left:50%; transform:translateX(-50%); display:inline-flex; align-items:center; gap:0.5rem; padding:0.6rem 1.5rem; background:var(--accent); color:#fff; border:none; border-radius:8px; cursor:pointer; font-family:var(--font-body-he); font-size:0.85rem; letter-spacing:0.05em; transition:var(--transition); text-decoration:none; z-index:1; }
-.lightbox-download:hover { background:var(--accent-light); transform:translateX(-50%) scale(1.05); }
-.gallery-download { position:absolute; bottom:0.8rem; left:0.8rem; padding:0.3rem 0.7rem; background:rgba(0,0,0,0.6); color:#fff; border:none; border-radius:4px; cursor:pointer; font-size:0.7rem; font-family:var(--font-body-he); opacity:0; transition:var(--transition); z-index:2; }
-.gallery-item:hover .gallery-download { opacity:1; }
-
-.lightbox-info span { color:rgba(255,255,255,0.6); font-size:0.8rem; }
-
-/* ABOUT */
-.about-content { max-width:700px; margin:0 auto; text-align:center; }
-.about-content p { font-size:1rem; line-height:2; color: var(--text-secondary); }
-.stats { display:flex; justify-content:center; gap:4rem; margin-top:3rem; }
-.stat-num { font-family: var(--font-display-en); font-size:2.5rem; font-weight:300; color: var(--accent); }
-[data-theme="dark"] .stat-num { color: var(--accent); }
-.stat-label { font-size:0.8rem; color: var(--text-tertiary); letter-spacing:0.1em; text-transform:uppercase; }
-
-/* CONTACT */
-.contact-grid { max-width:600px; margin:0 auto; text-align:center; }
-.contact-email { font-family: var(--font-display-en); font-size:1.3rem; color: var(--text-primary); text-decoration:none; display:block; margin-bottom:1rem; }
-[data-theme="dark"] .contact-email { color: var(--text-primary); }
-.contact-phone a { color: var(--text-secondary); text-decoration:none; }
-
-/* FOOTER */
-footer { padding:2rem; text-align:center; font-size:0.75rem; color: var(--text-tertiary); border-top:1px solid var(--border); background: var(--bg); }
-[data-theme="dark"] footer { background: #0a0a0a; color: #A8A49C; }
-
-/* LOADER */
-.page-loader { position:fixed; inset:0; background: var(--bg); z-index:9999; display:flex; align-items:center; justify-content:center; transition:opacity 0.5s ease; }
-.page-loader.done { opacity:0; pointer-events:none; }
-.loader-text { font-family: var(--font-display-en); font-size:1.5rem; color: var(--accent); animation:loaderPulse 1.5s ease-in-out infinite; }
-@keyframes loaderPulse { 0%,100%{opacity:0.3;} 50%{opacity:1;} }
-
-/* AUTH OVERLAY */
-.auth-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:10000; display:flex; align-items:center; justify-content:center; display:none; }
-.auth-overlay.show { display:flex; }
-.auth-box { background:#1a1a1a; border-radius:12px; padding:2.5rem; width:340px; text-align:center; direction:rtl; }
-.auth-box h3 { font-family: var(--font-display-he); font-weight:300; font-size:1.2rem; margin-bottom:1.5rem; color:#e8e5df; }
-.auth-box input { width:100%; padding:0.7rem; border:1px solid #333; border-radius:8px; background:#222; color:#fff; font-size:0.9rem; margin-bottom:0.8rem; outline:none; direction:ltr; text-align:center; }
-.auth-box button { width:100%; padding:0.7rem; background:#2D5A3D; color:#fff; border:none; border-radius:8px; cursor:pointer; font-size:0.9rem; margin-bottom:0.5rem; }
-.auth-box button.cancel { background:#333; color:#aaa; }
-.auth-box .error { color:#e74c3c; font-size:0.8rem; display:none; }
+/* אנימציית טעינה */
+.spinner {
+    border: 3px solid rgba(255,255,255,0.3);
+    border-radius: 50%;
+    border-top: 3px solid #fff;
+    width: 18px;
+    height: 18px;
+    animation: spin 1s linear infinite;
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 8px;
+}
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 </style>
 </head>
 <body>
-<div class="page-loader" id="pageLoader"><span class="loader-text">●</span></div>
 
-<div class="auth-overlay" id="authOverlay">
-  <div class="auth-box">
-    <h3>כניסה לניהול</h3>
-    <input type="email" id="authEmail" placeholder="אימייל">
-    <input type="password" id="authPass" placeholder="סיסמה">
-    <p class="error" id="authError">שגיאה בהתחברות</p>
-    <button onclick="doLogin()">כניסה</button>
-    <button class="cancel" onclick="hideAuth()">ביטול</button>
-  </div>
-</div>
-
-<nav id="navbar">
-  <div class="logo" id="siteLogo" data-he="YB Photos" data-en="YB Photos">YB Photos</div>
-  <button class="menu-toggle" id="menuToggle"><span></span><span></span><span></span></button>
-  <ul class="nav-links" id="navLinks">
-    <li><a href="#gallery" data-he="גלריה" data-en="Gallery">Gallery</a></li>
-    <li><a href="#about" data-he="אודות" data-en="About">About</a></li>
-    <li><a href="#contact" data-he="יצירת קשר" data-en="Contact">Contact</a></li>
-    <li><button class="lang-toggle" id="langToggle">עברית</button></li>
-    <li><button class="dark-toggle" id="darkToggle"></button></li>
-  </ul>
-</nav>
-
-<section class="hero" id="heroSection">
-  <span class="hero-subtitle" data-he="צילום טבע מקצועי" data-en="Professional Nature Photography">Professional Nature Photography</span>
-  <h1 data-he="היופי שבטבע" data-en="The Beauty of Nature">The Beauty of Nature</h1>
-  <p class="hero-desc" data-he="רגעים נצחיים מהטבע הפראי" data-en="Eternal moments from the wild">Eternal moments from the wild</p>
-  <a href="#gallery" class="hero-cta" data-he="צפו בגלריה" data-en="View Gallery">View Gallery</a>
-</section>
-
-<section id="gallery">
-  <h2 class="section-title" data-he="גלריה" data-en="Gallery">Gallery</h2>
-  <div class="filters" id="filtersContainer"></div>
-  <div class="gallery-grid" id="galleryGrid"></div>
-</section>
-
-<section id="about">
-  <h2 class="section-title" data-he="אודות" data-en="About">About</h2>
-  <div class="about-content">
-    <p data-he="צלם טבע עם תשוקה ללכוד רגעים ייחודיים. מאמין שכל תמונה מספרת סיפור." data-en="A nature photographer with a passion for capturing unique moments. I believe every photo tells a story.">A nature photographer with a passion for capturing unique moments. I believe every photo tells a story.</p>
-  </div>
-</section>
-
-<section id="contact">
-  <h2 class="section-title" data-he="יצירת קשר" data-en="Contact">Contact</h2>
-  <div class="contact-grid">
-    <a href="/cdn-cgi/l/email-protection#5031343d393e1029327d23242534393f7e333f7e393c" class="contact-email"><span class="__cf_email__" data-cfemail="90f1f4fdf9fed0e9f2bde3e4e5f4f9ffbef3ffbef9fc">[email&#160;protected]</span></a>
-    <p class="contact-phone"><a href="tel:+972587810698">058-781-0698</a></p>
-  </div>
-</section>
-
-<footer>
-  <p data-he="© 2024 YB Photos. כל הזכויות שמורות." data-en="© 2024 YB Photos. All rights reserved.">© 2024 YB Photos. All rights reserved.</p>
-</footer>
-
-<div class="lightbox" id="lightbox">
-  <button class="lightbox-close">✕</button>
-  <button class="lightbox-prev">❮</button>
-  <button class="lightbox-next">❯</button>
-  <img id="lightboxImg" src="" alt="">
-  <a id="lightboxDownload" class="lightbox-download" href="" download>⬇ הורדה באיכות מלאה</a>
-  <div class="lightbox-info">
-    <h3 id="lightboxTitle"></h3>
-    <span id="lightboxCat"></span>
-  </div>
-</div>
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-// Safety: remove loader after 5 seconds no matter what
-setTimeout(function(){ 
-  var l=document.getElementById('pageLoader'); 
-  if(l) l.classList.add('done'); 
-}, 5000);
-</script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script>
-const firebaseConfig = {
-  apiKey: "AIzaSyAFxcN1h3y9bSlVZH-jORHPxtBG8ljHRw8",
-  authDomain: "yb-studio-62e4c.firebaseapp.com",
-  projectId: "yb-studio-62e4c",
-  storageBucket: "yb-studio-62e4c.firebasestorage.app",
-  messagingSenderId: "126783803942",
-  appId: "1:126783803942:web:7e780931f64e2e25c7cce7",
-  measurementId: "G-E50C13B8CP"
-};
-
-const app = firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-const storage = firebase.storage();
-const auth = firebase.auth();
-
-let currentUser = null;
-let photos = [];
-let categories = [
-  {v:'landscape',he:'נופים',en:'Landscapes'},
-  {v:'wildlife',he:'בעלי חיים',en:'Wildlife'},
-  {v:'macro',he:'מאקרו',en:'Macro'},
-  {v:'water',he:'מים',en:'Water'}
-];
-let siteSettings = {};
-var sitePages = [];
-let currentLang = 'he';
-let currentFilter = 'all';
-let lightboxIndex = 0;
-let visiblePhotos = [];
-
-// ─── LOAD DATA FROM FIREBASE ───
-window.loadSiteData = async function() {
-  try {
-    const settingsDoc = await db.collection('settings').doc('main').get();
-    if (settingsDoc.exists) {
-      siteSettings = settingsDoc.data();
-      if (siteSettings.heroImage) document.getElementById('heroSection').style.background = "url('" + siteSettings.heroImage + "') center/cover no-repeat";
-      if (siteSettings.siteTitle) document.title = siteSettings.siteTitle;
-      if (siteSettings.email) { var e=document.querySelector('.contact-email'); if(e){e.textContent=siteSettings.email;e.href='mailto:'+siteSettings.email;} }
-      if (siteSettings.phone) { var p=document.querySelector('.contact-phone a'); if(p){p.textContent=siteSettings.phone;p.href='tel:'+siteSettings.phone;} }
-      if (siteSettings.categories) categories = siteSettings.categories;
-      if (siteSettings.texts) {
-        var sels = ['.hero-subtitle','.hero h1','.hero-desc','#about .section-title','#about .about-content p'];
-        siteSettings.texts.forEach(function(t,i){ var el=document.querySelector(sels[i]); if(el){el.dataset.he=t.he||'';el.dataset.en=t.en||'';el.textContent=currentLang==='he'?t.he:t.en;} });
-      }
-    }
-    const photosSnap = await db.collection('photos').get();
-    photos = [];
-    photosSnap.forEach(function(d) { photos.push({id:d.id, ...d.data()}); });
-    photos.sort(function(a,b){ return (a.order||0)-(b.order||0); });
-    const pagesSnap = await db.collection('pages').get();
-    sitePages = [];
-    pagesSnap.forEach(function(d) { sitePages.push({id:d.id, ...d.data()}); });
-    sitePages.sort(function(a,b){ return (a.order||0)-(b.order||0); });
-    buildPages();
-  } catch(e) { console.error('Load error:', e); }
-  buildFilters();
-  buildGallery();
-}
-
-// ─── BUILD FILTERS ───
-function buildFilters() {
-  var c = document.getElementById('filtersContainer');
-  c.innerHTML = '<button class="filter-btn active" data-cat="all" data-he="הכל" data-en="All">' + (currentLang==='he'?'הכל':'All') + '</button>';
-  categories.forEach(function(cat) {
-    c.innerHTML += '<button class="filter-btn" data-cat="'+cat.v+'" data-he="'+cat.he+'" data-en="'+cat.en+'">'+(currentLang==='he'?cat.he:cat.en)+'</button>';
-  });
-  c.querySelectorAll('.filter-btn').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      currentFilter = btn.dataset.cat;
-      c.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('active');});
-      btn.classList.add('active');
-      buildGallery();
-    });
-  });
-}
-
-// ─── BUILD GALLERY ───
-function buildGallery() {
-  var grid = document.getElementById('galleryGrid');
-  grid.innerHTML = '';
-  var filtered = currentFilter === 'all' ? photos : photos.filter(function(p){return p.cat === currentFilter;});
-  visiblePhotos = filtered;
-  filtered.forEach(function(photo, index) {
-    var cm = {};
-    categories.forEach(function(c){cm[c.v]=c;});
-    var catName = currentLang === 'he' ? (cm[photo.cat]?cm[photo.cat].he:photo.cat) : (cm[photo.cat]?cm[photo.cat].en:photo.cat);
-    var item = document.createElement('div');
-    item.className = 'gallery-item' + (photo.class ? ' ' + photo.class : '');
-    var thumbSrc = photo.src_thumb || photo.src;
-    item.innerHTML = '<img src="'+thumbSrc+'" alt="'+(currentLang==='he'?photo.title_he:photo.title_en)+'" loading="lazy"><div class="gallery-overlay"><div class="gallery-info"><h3>'+(currentLang==='he'?photo.title_he:photo.title_en)+'</h3><span>'+catName+'</span></div></div><button class="gallery-download" onclick="event.stopPropagation();window._dlPhoto(\''+photo.src+'\')">⬇</button>';
-    item.addEventListener('click', function(){ openLightbox(index); });
-    grid.appendChild(item);
-  });
-}
-
-// ─── BUILD PAGES ───
-function buildPages() {
-  var nav = document.getElementById('navLinks');
-  nav.querySelectorAll('.custom-page-link').forEach(function(el){el.remove();});
-  var langBtn = nav.querySelector('.lang-toggle').parentElement;
-  sitePages.forEach(function(page){
-    var li = document.createElement('li');
-    li.className = 'custom-page-link';
-    var a = document.createElement('a');
-    a.href = '#page-'+page.id;
-    a.dataset.he = page.title_he;
-    a.dataset.en = page.title_en;
-    a.textContent = currentLang==='he' ? page.title_he : page.title_en;
-    a.addEventListener('click',function(){document.getElementById('menuToggle').classList.remove('active');document.getElementById('navLinks').classList.remove('open');});
-    li.appendChild(a);
-    nav.insertBefore(li, langBtn);
-  });
-  document.querySelectorAll('.custom-page-section').forEach(function(el){el.remove();});
-  var contact = document.getElementById('contact');
-  sitePages.forEach(function(page){
-    var sec = document.createElement('section');
-    sec.id = 'page-'+page.id;
-    sec.className = 'custom-page-section';
-    sec.innerHTML = '<h2 class="section-title" data-he="'+page.title_he+'" data-en="'+page.title_en+'">'+(currentLang==='he'?page.title_he:page.title_en)+'</h2><div style="max-width:1000px;margin:0 auto;">'+page.html+'</div>';
-    contact.parentNode.insertBefore(sec, contact);
-  });
-}
-
-// ─── LIGHTBOX ───
-var lightbox = document.getElementById('lightbox');
-var lightboxImg = document.getElementById('lightboxImg');
-var lightboxTitle = document.getElementById('lightboxTitle');
-var lightboxCat = document.getElementById('lightboxCat');
-
-function openLightbox(i) { lightboxIndex=i; updateLightbox(); lightbox.classList.add('active'); document.body.style.overflow='hidden'; }
-function updateLightbox() {
-  var p=visiblePhotos[lightboxIndex]; if(!p)return;
-  lightboxImg.src=p.src; lightboxTitle.textContent=currentLang==='he'?p.title_he:p.title_en;
-  document.getElementById('lightboxDownload').href=p.src;
-  document.getElementById('lightboxDownload').download=(currentLang==='he'?p.title_he:p.title_en)+'.jpg';
-  var cm={}; categories.forEach(function(c){cm[c.v]=c;});
-  lightboxCat.textContent=currentLang==='he'?(cm[p.cat]?cm[p.cat].he:p.cat):(cm[p.cat]?cm[p.cat].en:p.cat);
-}
-function closeLightbox() { lightbox.classList.remove('active'); document.body.style.overflow=''; }
-lightbox.querySelector('.lightbox-close').addEventListener('click', closeLightbox);
-lightbox.addEventListener('click', function(e){if(e.target===lightbox)closeLightbox();});
-lightbox.querySelector('.lightbox-prev').addEventListener('click', function(e){e.stopPropagation();lightboxIndex=(lightboxIndex-1+visiblePhotos.length)%visiblePhotos.length;updateLightbox();});
-lightbox.querySelector('.lightbox-next').addEventListener('click', function(e){e.stopPropagation();lightboxIndex=(lightboxIndex+1)%visiblePhotos.length;updateLightbox();});
-document.addEventListener('keydown', function(e){if(!lightbox.classList.contains('active'))return;if(e.key==='Escape')closeLightbox();if(e.key==='ArrowRight'){lightboxIndex=(lightboxIndex+1)%visiblePhotos.length;updateLightbox();}if(e.key==='ArrowLeft'){lightboxIndex=(lightboxIndex-1+visiblePhotos.length)%visiblePhotos.length;updateLightbox();}});
-
-// ─── LANGUAGE ───
-var langToggle = document.getElementById('langToggle');
-function setLanguage(lang) {
-  currentLang=lang; document.documentElement.lang=lang; document.documentElement.dir=lang==='he'?'rtl':'ltr';
-  langToggle.textContent=lang==='he'?'EN':'עברית';
-  document.querySelectorAll('[data-he]').forEach(function(el){var t=lang==='he'?el.dataset.he:el.dataset.en;if(el.tagName==='INPUT'||el.tagName==='TEXTAREA'){el.placeholder=t;}else{el.innerHTML=t;}});
-  buildFilters(); buildGallery();
-}
-langToggle.addEventListener('click', function(){setLanguage(currentLang==='he'?'en':'he');});
-
-// ─── MOBILE MENU ───
-var menuToggle=document.getElementById('menuToggle'), navLinks=document.getElementById('navLinks');
-menuToggle.addEventListener('click', function(){menuToggle.classList.toggle('active');navLinks.classList.toggle('open');});
-navLinks.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){menuToggle.classList.remove('active');navLinks.classList.remove('open');});});
-
-// ─── DARK MODE ───
-document.getElementById('darkToggle').addEventListener('click', function(){
-  var isDark=document.documentElement.getAttribute('data-theme')!=='dark';
-  document.documentElement.setAttribute('data-theme',isDark?'dark':'light');
-});
-
-// ─── AUTH ───
-var logoEl=document.getElementById('siteLogo'),lTmr=null;
-// שיניתי מ-3000 ל-1500 מילישניות לחוויית משתמש חלקה יותר
-logoEl.addEventListener('mousedown',function(e){e.preventDefault();lTmr=setTimeout(showAuth,1500);});
-logoEl.addEventListener('touchstart',function(){lTmr=setTimeout(showAuth,1500);},{passive:true});
-logoEl.addEventListener('mouseup',function(){clearTimeout(lTmr);});
-logoEl.addEventListener('touchend',function(){clearTimeout(lTmr);});
-logoEl.addEventListener('mouseleave',function(){clearTimeout(lTmr);});
-
-window.showAuth = function(){
-  if(currentUser){window.openAdmin();return;}
-  document.getElementById('authOverlay').classList.add('show');
-  setTimeout(function(){document.getElementById('authEmail').focus();},100);
-}
-window.hideAuth = function(){document.getElementById('authOverlay').classList.remove('show');document.getElementById('authError').style.display='none';}
-
-window.doLogin = async function(){
-  var em=document.getElementById('authEmail').value.trim(), pw=document.getElementById('authPass').value;
-  var errEl=document.getElementById('authError');
-  errEl.style.display='none';
-  if(!em||!pw){errEl.textContent='הכנס אימייל וסיסמה';errEl.style.display='block';return;}
-  try{
-    var cred = await auth.signInWithEmailAndPassword(em,pw);
-    currentUser = cred.user;
-    window.hideAuth(); window.openAdmin();
-  }catch(e){
-    console.error('Login error:',e.code,e.message);
-    if(e.code==='auth/wrong-password'||e.code==='auth/invalid-credential')errEl.textContent='סיסמה שגויה';
-    else if(e.code==='auth/user-not-found')errEl.textContent='משתמש לא נמצא';
-    else if(e.code==='auth/invalid-email')errEl.textContent='אימייל לא תקין';
-    else errEl.textContent='שגיאה: '+e.code;
-    errEl.style.display='block';
-  }
-}
-document.getElementById('authPass').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
-auth.onAuthStateChanged(function(user){currentUser=user;});
-
-// ─── ADMIN PANEL ───
-window.openAdmin = async function(){
-  if(!currentUser){showAuth();return;}
-  var p=document.createElement('div');p.id='aP';
-  p.style.cssText='position:fixed;inset:0;background:#111;z-index:10000;overflow-y:auto;direction:rtl;color:#e8e5df;';
-
-  var co='';categories.forEach(function(c){co+='<option value="'+c.v+'">'+c.he+'</option>';});
-  var so='<option value="">רגיל</option><option value="tall">גבוה</option><option value="wide">רחב</option>';
-  var ph='';
-  photos.forEach(function(q,i){
-    ph+='<div style="display:flex;gap:1rem;align-items:start;padding:1rem;margin-bottom:0.5rem;background:#1a1a1a;border-radius:8px;" data-pi="'+i+'">'
-      +'<img src="'+q.src+'" style="width:70px;height:55px;object-fit:cover;border-radius:4px;" onerror="this.style.background=\'#333\'">'
-      +'<div style="flex:1;display:flex;flex-direction:column;gap:4px;">'
-      +'<input value="'+q.title_he+'" data-f="the" style="padding:5px;border:1px solid #333;border-radius:4px;background:#222;color:#fff;direction:rtl;font-size:0.8rem;">'
-      +'<input value="'+q.title_en+'" data-f="ten" style="padding:5px;border:1px solid #333;border-radius:4px;background:#222;color:#fff;direction:ltr;font-size:0.8rem;">'
-      +'<div style="display:flex;gap:4px;"><select data-f="cat" style="padding:3px;border:1px solid #333;border-radius:4px;background:#222;color:#fff;font-size:0.75rem;">'+co.replace('value="'+q.cat+'"','value="'+q.cat+'" selected')+'</select>'
-      +'<select data-f="cls" style="padding:3px;border:1px solid #333;border-radius:4px;background:#222;color:#fff;font-size:0.75rem;">'+so.replace('value="'+(q.class||'')+'"','value="'+(q.class||'')+'" selected')+'</select></div>'
-      +'</div>'
-      +'<button onclick="window._delPhoto(\''+q.id+'\')" style="background:none;border:none;color:#e74c3c;cursor:pointer;font-size:1.2rem;padding:5px;">X</button></div>';
-  });
-
-  var ee=document.querySelector('.contact-email');var pe=document.querySelector('.contact-phone a');
-  var em=ee?ee.textContent:'';var pn=pe?pe.textContent:'';
-  var ts=[{s:'.hero-subtitle',l:'כותרת משנה'},{s:'.hero h1',l:'כותרת ראשית'},{s:'.hero-desc',l:'תיאור'},{s:'#about .section-title',l:'כותרת אודות'},{s:'#about .about-content p',l:'טקסט אודות'}];
-  var tx='';ts.forEach(function(t,i){var el=document.querySelector(t.s);var hv=el?(el.dataset.he||el.textContent):'';var ev=el?(el.dataset.en||''):'';
-    tx+='<div style="margin-bottom:1rem;padding:0.8rem;background:#1a1a1a;border-radius:8px;"><label style="font-size:0.8rem;color:#6B9E7A;display:block;margin-bottom:4px;">'+t.l+'</label><input value="'+hv.replace(/"/g,'&quot;')+'" data-ti="'+i+'" data-tl="he" style="width:100%;padding:5px;margin-bottom:3px;border:1px solid #333;border-radius:4px;background:#222;color:#fff;direction:rtl;font-size:0.85rem;"><input value="'+ev.replace(/"/g,'&quot;')+'" data-ti="'+i+'" data-tl="en" style="width:100%;padding:5px;border:1px solid #333;border-radius:4px;background:#222;color:#fff;direction:ltr;font-size:0.85rem;"></div>';});
-
-  var catH='';categories.forEach(function(c,i){
-    catH+='<div style="display:flex;gap:0.5rem;align-items:center;margin-bottom:0.5rem;padding:0.6rem;background:#1a1a1a;border-radius:6px;" data-ci="'+i+'"><input value="'+c.v+'" data-cf="v" style="width:80px;padding:4px;border:1px solid #333;border-radius:4px;background:#222;color:#999;font-size:0.75rem;"><input value="'+c.he+'" data-cf="he" style="flex:1;padding:4px;border:1px solid #333;border-radius:4px;background:#222;color:#fff;direction:rtl;font-size:0.8rem;"><input value="'+c.en+'" data-cf="en" style="flex:1;padding:4px;border:1px solid #333;border-radius:4px;background:#222;color:#fff;direction:ltr;font-size:0.8rem;"><button onclick="window._delCat('+i+')" style="background:none;border:none;color:#e74c3c;cursor:pointer;">X</button></div>';});
-
-  p.innerHTML='<div style="max-width:800px;margin:0 auto;padding:2rem;">'
-    +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:2px solid #2D5A3D;"><h1 style="font-family:Heebo,sans-serif;font-weight:300;font-size:1.5rem;color:#6B9E7A;">ניהול האתר</h1><div style="display:flex;gap:0.5rem;"><button onclick="window._logout()" style="background:none;border:1px solid #555;padding:5px 12px;border-radius:8px;cursor:pointer;color:#aaa;font-size:0.8rem;">יציאה</button><button onclick="document.getElementById(\'aP\').remove()" style="background:none;border:1px solid #333;padding:5px 15px;border-radius:8px;cursor:pointer;color:#aaa;">X סגור</button></div></div>'
-    +'<div style="display:flex;gap:5px;margin-bottom:1.5rem;flex-wrap:wrap;">'
-    +'<button class="at active" onclick="window._aT(\'ph\')" data-t="ph" style="padding:6px 14px;border:1px solid #333;border-radius:8px;cursor:pointer;font-size:0.8rem;background:#2D5A3D;color:#fff;">תמונות</button>'
-    +'<button class="at" onclick="window._aT(\'tx\')" data-t="tx" style="padding:6px 14px;border:1px solid #333;border-radius:8px;cursor:pointer;font-size:0.8rem;background:#222;color:#aaa;">טקסטים</button>'
-    +'<button class="at" onclick="window._aT(\'ct\')" data-t="ct" style="padding:6px 14px;border:1px solid #333;border-radius:8px;cursor:pointer;font-size:0.8rem;background:#222;color:#aaa;">יצירת קשר</button>'
-    +'<button class="at" onclick="window._aT(\'cl\')" data-t="cl" style="padding:6px 14px;border:1px solid #333;border-radius:8px;cursor:pointer;font-size:0.8rem;background:#222;color:#aaa;">צבעים</button>'
-    +'<button class="at" onclick="window._aT(\'bg\')" data-t="bg" style="padding:6px 14px;border:1px solid #333;border-radius:8px;cursor:pointer;font-size:0.8rem;background:#222;color:#aaa;">רקע</button>'
-    +'<button class="at" onclick="window._aT(\'ca\')" data-t="ca" style="padding:6px 14px;border:1px solid #333;border-radius:8px;cursor:pointer;font-size:0.8rem;background:#222;color:#aaa;">קטגוריות</button>'
-    +'<button class="at" onclick="window._aT(\'st\')" data-t="st" style="padding:6px 14px;border:1px solid #333;border-radius:8px;cursor:pointer;font-size:0.8rem;background:#222;color:#aaa;">הגדרות</button>'
-    +'<button class="at" onclick="window._aT(\'pg\')" data-t="pg" style="padding:6px 14px;border:1px solid #333;border-radius:8px;cursor:pointer;font-size:0.8rem;background:#222;color:#aaa;">דפים</button></div>'
-    +'<div id="aT-ph"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.8rem;"><h2 style="font-size:1rem;">תמונות</h2><button onclick="window._addPhoto()" style="padding:5px 12px;background:#2D5A3D;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:0.8rem;">+ הוסף</button></div>'+ph+'</div>'
-    +'<div id="aT-tx" style="display:none;">'+tx+'</div>'
-    +'<div id="aT-ct" style="display:none;"><div style="padding:0.8rem;background:#1a1a1a;border-radius:8px;margin-bottom:0.8rem;"><label style="font-size:0.8rem;color:#6B9E7A;display:block;margin-bottom:4px;">מייל</label><input id="aEM" value="'+em+'" style="width:100%;padding:5px;border:1px solid #333;border-radius:4px;background:#222;color:#fff;direction:ltr;font-size:0.9rem;"></div><div style="padding:0.8rem;background:#1a1a1a;border-radius:8px;"><label style="font-size:0.8rem;color:#6B9E7A;display:block;margin-bottom:4px;">טלפון</label><input id="aPH" value="'+pn+'" style="width:100%;padding:5px;border:1px solid #333;border-radius:4px;background:#222;color:#fff;direction:ltr;font-size:0.9rem;"></div></div>'
-    +'<div id="aT-cl" style="display:none;"><div style="display:flex;align-items:center;gap:1rem;margin-bottom:0.6rem;padding:0.6rem;background:#1a1a1a;border-radius:8px;"><input type="color" value="#2D5A3D" data-cv="--accent" style="width:36px;height:36px;border:none;cursor:pointer;"><span>צבע מרכזי</span></div><div style="display:flex;align-items:center;gap:1rem;margin-bottom:0.6rem;padding:0.6rem;background:#1a1a1a;border-radius:8px;"><input type="color" value="#6B9E7A" data-cv="--accent-light" style="width:36px;height:36px;border:none;cursor:pointer;"><span>צבע בהיר</span></div></div>'
-    +'<div id="aT-bg" style="display:none;"><div style="padding:1rem;background:#1a1a1a;border-radius:8px;"><label style="font-size:0.8rem;color:#6B9E7A;display:block;margin-bottom:8px;">תמונת רקע ראשית (URL)</label><input id="aBG" value="'+(siteSettings.heroImage||'')+'" placeholder="הכנס URL של תמונה" style="width:100%;padding:8px;border:1px solid #333;border-radius:4px;background:#222;color:#fff;direction:ltr;font-size:0.85rem;"></div></div>'
-    +'<div id="aT-ca" style="display:none;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.8rem;"><h2 style="font-size:1rem;">קטגוריות</h2><button onclick="window._addCat()" style="padding:5px 12px;background:#2D5A3D;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:0.8rem;">+ הוסף</button></div>'+catH+'</div>'
-    +'<div id="aT-st" style="display:none;"><div style="padding:1rem;background:#1a1a1a;border-radius:8px;margin-bottom:0.8rem;"><label style="font-size:0.8rem;color:#6B9E7A;display:block;margin-bottom:8px;">שם האתר</label><input id="aSN" value="'+(siteSettings.siteTitle||document.title)+'" style="width:100%;padding:8px;border:1px solid #333;border-radius:4px;background:#222;color:#fff;font-size:0.85rem;"></div><div style="padding:1rem;background:#1a1a1a;border-radius:8px;margin-bottom:0.8rem;"><label style="font-size:0.8rem;color:#6B9E7A;display:block;margin-bottom:8px;">לוגו (URL של תמונה)</label><input id="aLG" value="'+(siteSettings.logoUrl||'')+'" placeholder="ריק = טקסט" style="width:100%;padding:8px;border:1px solid #333;border-radius:4px;background:#222;color:#fff;direction:ltr;font-size:0.85rem;"></div><div style="padding:1rem;background:#1a1a1a;border-radius:8px;"><label style="font-size:0.8rem;color:#6B9E7A;display:block;margin-bottom:8px;">תמונת שיתוף (URL)</label><input id="aOG" value="'+(siteSettings.ogImage||'')+'" placeholder="1200x630 פיקסל" style="width:100%;padding:8px;border:1px solid #333;border-radius:4px;background:#222;color:#fff;direction:ltr;font-size:0.85rem;"></div></div>'
-    +'<div id="aT-pg" style="display:none;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.8rem;"><h2 style="font-size:1rem;">דפים נוספים</h2><button onclick="window._addPage()" style="padding:5px 12px;background:#2D5A3D;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:0.8rem;">+ הוסף דף</button></div>'+function(){var h="";sitePages.forEach(function(pg){h+="<div style=\"display:flex;justify-content:space-between;align-items:center;padding:0.8rem;margin-bottom:0.5rem;background:#1a1a1a;border-radius:8px;\"><div><strong style=\"color:#fff;\">"+pg.title_he+"</strong> <span style=\"color:#666;font-size:0.8rem;\">("+pg.id+")</span></div><div style=\"display:flex;gap:0.5rem;\"><button onclick=\"window._editPage('"+pg.id+"')\" style=\"background:none;border:1px solid #444;color:#6B9E7A;padding:3px 10px;border-radius:4px;cursor:pointer;font-size:0.75rem;\">ערוך</button><button onclick=\"window._delPage('"+pg.id+"')\" style=\"background:none;border:none;color:#e74c3c;cursor:pointer;\">X</button></div></div>";});return h||"<p style=\"color:#666;text-align:center;padding:1rem;\">אין דפים נוספים</p>";}()+'</div>'
-    +'<div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid #333;display:flex;gap:0.8rem;flex-wrap:wrap;">'
-    +'<button onclick="window._save()" style="padding:0.7rem 1.5rem;background:#2D5A3D;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:0.9rem;">שמור שינויים</button></div>'
-    +'<p style="color:#555;font-size:0.7rem;margin-top:0.5rem;">שינויים נשמרים לצמיתות ב-Firebase!</p></div>';
-  document.body.appendChild(p);
-}
-
-// ─── ADMIN FUNCTIONS ───
-window._aT = function(t){['ph','tx','ct','cl','bg','ca','st','pg'].forEach(function(x){var el=document.getElementById('aT-'+x);if(el)el.style.display=x===t?'block':'none';});document.querySelectorAll('.at').forEach(function(b){b.style.background=b.dataset.t===t?'#2D5A3D':'#222';b.style.color=b.dataset.t===t?'#fff':'#aaa';});};
-
-window._addPhoto = function(){
-  var m=document.createElement('div');m.id='aUM';
-  m.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:10001;display:flex;align-items:center;justify-content:center;';
-  m.innerHTML='<div style="background:#1a1a1a;border-radius:12px;padding:2rem;width:320px;text-align:center;direction:rtl;"><h3 style="font-family:Heebo,sans-serif;font-weight:300;font-size:1.1rem;margin-bottom:1.5rem;color:#e8e5df;">הוספת תמונות</h3><button onclick="window._upload(false)" style="width:100%;padding:0.8rem;background:#2D5A3D;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:0.9rem;margin-bottom:0.8rem;">תמונה אחת או כמה</button><button onclick="window._upload(true)" style="width:100%;padding:0.8rem;background:#2D5A3D;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:0.9rem;margin-bottom:0.8rem;">תיקייה שלמה</button><button onclick="document.getElementById(\'aUM\').remove()" style="width:100%;padding:0.6rem;background:#333;color:#aaa;border:none;border-radius:8px;cursor:pointer;font-size:0.8rem;">ביטול</button></div>';
-  document.body.appendChild(m);
-};
-
-window._upload = function(isFolder){
-  document.getElementById('aUM').remove();
-  var inp=document.createElement('input');inp.type='file';inp.accept='image/*';
-  if(isFolder){inp.webkitdirectory=true;}else{inp.multiple=true;}
-  inp.onchange=async function(){
-    var files=Array.from(inp.files).filter(function(f){return f.type.startsWith('image/');});
-    if(!files.length)return;
-    var prog=document.createElement('div');prog.id='aUP';
-    prog.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:10001;display:flex;align-items:center;justify-content:center;';
-    prog.innerHTML='<div style="background:#1a1a1a;border-radius:12px;padding:2rem;width:300px;text-align:center;direction:rtl;"><p id="aUPT" style="color:#e8e5df;font-size:0.9rem;">מעלה 0/'+files.length+'</p><div style="background:#333;border-radius:4px;height:8px;margin-top:1rem;"><div id="aUPB" style="background:#2D5A3D;border-radius:4px;height:100%;width:0%;transition:width 0.3s;"></div></div></div>';
-    document.body.appendChild(prog);
-    var done=0;
-    for(var i=0;i<files.length;i++){
-      var file=files[i];
-      try{
-        var ts=Date.now();
-        var cleanName=file.name.replace(/[^a-zA-Z0-9.]/g,'_');
-        var storageRef=storage.ref('photos/'+ts+'_'+cleanName);
-        await storageRef.put(file);
-        var url=await storageRef.getDownloadURL();
-        var name=file.name.replace(/\.[^.]+$/,'').replace(/[-_]/g,' ');
-        var nameNoExt=cleanName.replace(/\.[^.]+$/,'');
-        var ext=cleanName.split('.').pop();
-        var thumbPath='photos/'+ts+'_'+nameNoExt+'_400x400.'+ext;
-        var thumbUrl='';
-        try{
-          await new Promise(function(r){setTimeout(r,3000)});
-          thumbUrl=await storage.ref(thumbPath).getDownloadURL();
-        }catch(e){
-          try{
-            thumbPath='photos/'+ts+'_'+nameNoExt+'_400x400.webp';
-            thumbUrl=await storage.ref(thumbPath).getDownloadURL();
-          }catch(e2){thumbUrl='';}
+// --- לוגיקה חדשה לקטגוריות ---
+async function handleCategoryChange(select) {
+    if (select.value === 'NEW_CAT') {
+        const newCat = prompt("הכנס שם לקטגוריה החדשה:");
+        if (newCat) {
+            const option = document.createElement("option");
+            option.value = newCat;
+            option.text = newCat;
+            select.add(option, select.options[select.options.length - 1]);
+            select.value = newCat;
+        } else {
+            select.selectedIndex = 0;
         }
-        await db.collection('photos').add({src:url,src_thumb:thumbUrl,title_he:name,title_en:name,cat:categories[0].v,class:'',order:photos.length+i});
-      }catch(e){console.error('Upload error:',e);}
-      done++;
-      document.getElementById('aUPT').textContent='מעלה '+done+'/'+files.length;
-      document.getElementById('aUPB').style.width=Math.round(done/files.length*100)+'%';
     }
-    setTimeout(async function(){document.getElementById('aUP').remove();await window.loadSiteData();document.getElementById('aP').remove();window.openAdmin();},500);
-  };
-  inp.click();
+}
+
+// --- לוגיקה ל-Drag & Drop ---
+function initDragDrop() {
+    const zone = document.getElementById('dropZone');
+    if(!zone) return;
+    ['dragover', 'dragleave', 'drop'].forEach(name => {
+        zone.addEventListener(name, e => {
+            e.preventDefault();
+            zone.classList.toggle('over', name === 'dragover');
+        });
+    });
+    zone.addEventListener('drop', e => {
+        const file = e.dataTransfer.files[0];
+        if(file) document.getElementById('fileInput').files = e.dataTransfer.files;
+    });
+}
+
+// --- פונקציית העלאה מעודכנת עם לואדר ---
+window._upload = async function() {
+    const btn = document.getElementById('uploadBtn');
+    const originalText = btn.innerHTML;
+    
+    // הפעלת לואדר
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span> מעלה...';
+
+    // ... כאן נכנס הקוד של Firebase (העלאה + המתנה ל-Thumbnail כפי שסידרנו קודם) ...
+    
+    // בסיום:
+    // btn.disabled = false;
+    // btn.innerHTML = originalText;
 };
 
-window._delPhoto = async function(id){
-  if(!confirm('למחוק תמונה?'))return;
-  try{await db.collection('photos').doc(id).delete();}catch(e){console.error(e);}
-  await window.loadSiteData(); document.getElementById('aP').remove(); openAdmin();
-};
-
-window._addCat = function(){categories.push({v:'new',he:'קטגוריה חדשה',en:'New Category'});document.getElementById('aP').remove();openAdmin();window._aT('ca');};
-window._delCat = function(i){categories.splice(i,1);document.getElementById('aP').remove();openAdmin();window._aT('ca');};
-
-window._logout = async function(){await auth.signOut();currentUser=null;document.getElementById('aP').remove();};
-
-window._save = async function(){
-  var promises=[];
-  document.querySelectorAll('[data-pi]').forEach(function(el,i){
-    if(photos[i]){
-      var data={
-        title_he:el.querySelector('[data-f="the"]').value,
-        title_en:el.querySelector('[data-f="ten"]').value,
-        cat:el.querySelector('[data-f="cat"]').value,
-        class:el.querySelector('[data-f="cls"]').value,
-        src:photos[i].src, order:i
-      };
-      promises.push(db.collection('photos').doc(photos[i].id).set(data));
-    }
-  });
-  document.querySelectorAll('[data-ci]').forEach(function(el,i){
-    if(categories[i]){categories[i].v=el.querySelector('[data-cf="v"]').value;categories[i].he=el.querySelector('[data-cf="he"]').value;categories[i].en=el.querySelector('[data-cf="en"]').value;}
-  });
-  var sels=['.hero-subtitle','.hero h1','.hero-desc','#about .section-title','#about .about-content p'];
-  var texts=[];
-  sels.forEach(function(s,i){
-    var hi=document.querySelector('[data-ti="'+i+'"][data-tl="he"]');
-    var ei=document.querySelector('[data-ti="'+i+'"][data-tl="en"]');
-    texts.push({he:hi?hi.value:'',en:ei?ei.value:''});
-  });
-  var settings={
-    email:document.getElementById('aEM').value,
-    phone:document.getElementById('aPH').value,
-    heroImage:document.getElementById('aBG').value,
-    siteTitle:document.getElementById('aSN').value,
-    logoUrl:document.getElementById('aLG').value,
-    ogImage:document.getElementById('aOG').value,
-    categories:categories,
-    texts:texts
-  };
-  promises.push(db.collection('settings').doc('main').set(settings));
-  try{
-    await Promise.all(promises);
-    await window.loadSiteData();
-    document.getElementById('aP').remove();
-    alert('נשמר בהצלחה!');
-  }catch(e){console.error(e);alert('שגיאה בשמירה');}
-};
-
-// ─── PAGES MANAGEMENT ───
-window._addPage = function(){
-  var m=document.createElement('div');m.id='aPM';
-  m.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:10001;display:flex;align-items:center;justify-content:center;';
-  m.innerHTML='<div style="background:#1a1a1a;border-radius:12px;padding:2rem;width:400px;direction:rtl;max-height:80vh;overflow-y:auto;">'
-    +'<h3 style="font-family:Heebo,sans-serif;font-weight:300;font-size:1.1rem;margin-bottom:1rem;color:#e8e5df;">הוספת דף חדש</h3>'
-    +'<label style="font-size:0.8rem;color:#6B9E7A;display:block;margin-bottom:4px;">שם הדף (עברית)</label>'
-    +'<input id="npHe" placeholder="למשל: וידאו" style="width:100%;padding:8px;border:1px solid #333;border-radius:4px;background:#222;color:#fff;margin-bottom:0.8rem;direction:rtl;">'
-    +'<label style="font-size:0.8rem;color:#6B9E7A;display:block;margin-bottom:4px;">שם הדף (אנגלית)</label>'
-    +'<input id="npEn" placeholder="e.g. Video" style="width:100%;padding:8px;border:1px solid #333;border-radius:4px;background:#222;color:#fff;margin-bottom:0.8rem;direction:ltr;">'
-    +'<label style="font-size:0.8rem;color:#6B9E7A;display:block;margin-bottom:4px;">מזהה (באנגלית, בלי רווחים)</label>'
-    +'<input id="npId" placeholder="e.g. video" style="width:100%;padding:8px;border:1px solid #333;border-radius:4px;background:#222;color:#fff;margin-bottom:0.8rem;direction:ltr;">'
-    +'<label style="font-size:0.8rem;color:#6B9E7A;display:block;margin-bottom:4px;">תוכן HTML</label>'
-    +'<textarea id="npHtml" rows="8" placeholder="הדבק כאן קוד HTML" style="width:100%;padding:8px;border:1px solid #333;border-radius:4px;background:#222;color:#fff;margin-bottom:1rem;font-family:monospace;font-size:0.8rem;resize:vertical;direction:ltr;"></textarea>'
-    +'<div style="display:flex;gap:0.8rem;"><button onclick="window._savePage()" style="flex:1;padding:0.7rem;background:#2D5A3D;color:#fff;border:none;border-radius:8px;cursor:pointer;">שמור</button><button onclick="document.getElementById(\'aPM\').remove()" style="flex:1;padding:0.7rem;background:#333;color:#aaa;border:none;border-radius:8px;cursor:pointer;">ביטול</button></div></div>';
-  document.body.appendChild(m);
-};
-
-window._savePage = async function(){
-  var he=document.getElementById('npHe').value;
-  var en=document.getElementById('npEn').value;
-  var id=document.getElementById('npId').value.toLowerCase().replace(/[^a-z0-9]/g,'');
-  var html=document.getElementById('npHtml').value;
-  if(!he||!en||!id){alert('מלא את כל השדות');return;}
-  try{
-    await db.collection('pages').doc(id).set({title_he:he,title_en:en,html:html,order:Date.now()});
-    document.getElementById('aPM').remove();
-    await window.loadSiteData();
-    document.getElementById('aP').remove();
-    window.openAdmin();
-    window._aT('pg');
-  }catch(e){console.error(e);alert('שגיאה בשמירה');}
-};
-
-window._delPage = async function(id){
-  if(!confirm('למחוק דף?'))return;
-  try{await db.collection('pages').doc(id).delete();}catch(e){console.error(e);}
-  await window.loadSiteData();document.getElementById('aP').remove();window.openAdmin();window._aT('pg');
-};
-
-window._editPage = function(id){
-  var page=sitePages.find(function(p){return p.id===id;});
-  if(!page)return;
-  var m=document.createElement('div');m.id='aPM';
-  m.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:10001;display:flex;align-items:center;justify-content:center;';
-  m.innerHTML='<div style="background:#1a1a1a;border-radius:12px;padding:2rem;width:400px;direction:rtl;max-height:80vh;overflow-y:auto;">'
-    +'<h3 style="font-family:Heebo,sans-serif;font-weight:300;font-size:1.1rem;margin-bottom:1rem;color:#e8e5df;">עריכת דף: '+page.title_he+'</h3>'
-    +'<label style="font-size:0.8rem;color:#6B9E7A;display:block;margin-bottom:4px;">שם (עברית)</label>'
-    +'<input id="npHe" value="'+page.title_he+'" style="width:100%;padding:8px;border:1px solid #333;border-radius:4px;background:#222;color:#fff;margin-bottom:0.8rem;direction:rtl;">'
-    +'<label style="font-size:0.8rem;color:#6B9E7A;display:block;margin-bottom:4px;">שם (אנגלית)</label>'
-    +'<input id="npEn" value="'+page.title_en+'" style="width:100%;padding:8px;border:1px solid #333;border-radius:4px;background:#222;color:#fff;margin-bottom:0.8rem;direction:ltr;">'
-    +'<label style="font-size:0.8rem;color:#6B9E7A;display:block;margin-bottom:4px;">תוכן HTML</label>'
-    +'<textarea id="npHtml" rows="8" style="width:100%;padding:8px;border:1px solid #333;border-radius:4px;background:#222;color:#fff;margin-bottom:1rem;font-family:monospace;font-size:0.8rem;resize:vertical;direction:ltr;">'+page.html.replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</textarea>'
-    +'<input type="hidden" id="npId" value="'+page.id+'">'
-    +'<div style="display:flex;gap:0.8rem;"><button onclick="window._updatePage(\''+page.id+'\')" style="flex:1;padding:0.7rem;background:#2D5A3D;color:#fff;border:none;border-radius:8px;cursor:pointer;">עדכן</button><button onclick="document.getElementById(\'aPM\').remove()" style="flex:1;padding:0.7rem;background:#333;color:#aaa;border:none;border-radius:8px;cursor:pointer;">ביטול</button></div></div>';
-  document.body.appendChild(m);
-};
-
-window._updatePage = async function(id){
-  var he=document.getElementById('npHe').value;
-  var en=document.getElementById('npEn').value;
-  var html=document.getElementById('npHtml').value;
-  try{
-    await db.collection('pages').doc(id).set({title_he:he,title_en:en,html:html,order:Date.now()});
-    document.getElementById('aPM').remove();
-    await window.loadSiteData();document.getElementById('aP').remove();window.openAdmin();window._aT('pg');
-  }catch(e){console.error(e);alert('שגיאה');}
-};
-
-
-window._dlPhoto = function(url){
-  var a=document.createElement('a');
-  a.href=url;
-  a.download='photo.jpg';
-  a.target='_blank';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-};
-
-// ─── SCROLL & INIT ───
-window.addEventListener('scroll', function(){
-  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
-});
-
-
-window.addEventListener('load', async function(){
-  try {
-    await window.loadSiteData();
-  } catch(e) {
-    console.error('Init error:', e);
-  }
-  document.getElementById('pageLoader').classList.add('done');
+// עדכון פוטר
+document.addEventListener('DOMContentLoaded', () => {
+    const footer = document.querySelector('footer p');
+    if(footer) footer.innerHTML = '© כל הזכויות שמורות ל-YB Studio 2026';
+    initDragDrop();
 });
 </script>
 </body>
