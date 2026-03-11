@@ -115,6 +115,12 @@ section { padding:5rem 2rem; background: var(--bg); transition: background var(-
 .lightbox-next { right:1rem; top:50%; transform:translateY(-50%); }
 .lightbox-info { position:absolute; bottom:2rem; text-align:center; width:100%; }
 .lightbox-info h3 { color:#fff; font-family: var(--font-display-en); font-weight:300; }
+
+.lightbox-download { position:absolute; bottom:5rem; left:50%; transform:translateX(-50%); display:inline-flex; align-items:center; gap:0.5rem; padding:0.6rem 1.5rem; background:var(--accent); color:#fff; border:none; border-radius:8px; cursor:pointer; font-family:var(--font-body-he); font-size:0.85rem; letter-spacing:0.05em; transition:var(--transition); text-decoration:none; z-index:1; }
+.lightbox-download:hover { background:var(--accent-light); transform:translateX(-50%) scale(1.05); }
+.gallery-download { position:absolute; bottom:0.8rem; left:0.8rem; padding:0.3rem 0.7rem; background:rgba(0,0,0,0.6); color:#fff; border:none; border-radius:4px; cursor:pointer; font-size:0.7rem; font-family:var(--font-body-he); opacity:0; transition:var(--transition); z-index:2; }
+.gallery-item:hover .gallery-download { opacity:1; }
+
 .lightbox-info span { color:rgba(255,255,255,0.6); font-size:0.8rem; }
 
 /* ABOUT */
@@ -215,6 +221,7 @@ footer { padding:2rem; text-align:center; font-size:0.75rem; color: var(--text-t
   <button class="lightbox-prev">❮</button>
   <button class="lightbox-next">❯</button>
   <img id="lightboxImg" src="" alt="">
+  <a id="lightboxDownload" class="lightbox-download" href="" download>⬇ הורדה באיכות מלאה</a>
   <div class="lightbox-info">
     <h3 id="lightboxTitle"></h3>
     <span id="lightboxCat"></span>
@@ -321,7 +328,8 @@ function buildGallery() {
     var catName = currentLang === 'he' ? (cm[photo.cat]?cm[photo.cat].he:photo.cat) : (cm[photo.cat]?cm[photo.cat].en:photo.cat);
     var item = document.createElement('div');
     item.className = 'gallery-item' + (photo.class ? ' ' + photo.class : '');
-    item.innerHTML = '<img src="'+photo.src+'" alt="'+(currentLang==='he'?photo.title_he:photo.title_en)+'" loading="lazy"><div class="gallery-overlay"><div class="gallery-info"><h3>'+(currentLang==='he'?photo.title_he:photo.title_en)+'</h3><span>'+catName+'</span></div></div>';
+    var thumbSrc = photo.src_thumb || photo.src;
+    item.innerHTML = '<img src="'+thumbSrc+'" alt="'+(currentLang==='he'?photo.title_he:photo.title_en)+'" loading="lazy"><div class="gallery-overlay"><div class="gallery-info"><h3>'+(currentLang==='he'?photo.title_he:photo.title_en)+'</h3><span>'+catName+'</span></div></div><button class="gallery-download" onclick="event.stopPropagation();window._dlPhoto(\''+photo.src+'\')">⬇</button>';
     item.addEventListener('click', function(){ openLightbox(index); });
     grid.appendChild(item);
   });
@@ -365,6 +373,8 @@ function openLightbox(i) { lightboxIndex=i; updateLightbox(); lightbox.classList
 function updateLightbox() {
   var p=visiblePhotos[lightboxIndex]; if(!p)return;
   lightboxImg.src=p.src; lightboxTitle.textContent=currentLang==='he'?p.title_he:p.title_en;
+  document.getElementById('lightboxDownload').href=p.src;
+  document.getElementById('lightboxDownload').download=(currentLang==='he'?p.title_he:p.title_en)+'.jpg';
   var cm={}; categories.forEach(function(c){cm[c.v]=c;});
   lightboxCat.textContent=currentLang==='he'?(cm[p.cat]?cm[p.cat].he:p.cat):(cm[p.cat]?cm[p.cat].en:p.cat);
 }
@@ -513,11 +523,26 @@ window._upload = function(isFolder){
     for(var i=0;i<files.length;i++){
       var file=files[i];
       try{
-        var storageRef=storage.ref('photos/'+Date.now()+'_'+file.name);
+        var ts=Date.now();
+        var cleanName=file.name.replace(/[^a-zA-Z0-9.]/g,'_');
+        var storageRef=storage.ref('photos/'+ts+'_'+cleanName);
         await storageRef.put(file);
         var url=await storageRef.getDownloadURL();
         var name=file.name.replace(/\.[^.]+$/,'').replace(/[-_]/g,' ');
-        await db.collection('photos').add({src:url,title_he:name,title_en:name,cat:categories[0].v,class:'',order:photos.length+i});
+        var nameNoExt=cleanName.replace(/\.[^.]+$/,'');
+        var ext=cleanName.split('.').pop();
+        var thumbPath='photos/'+ts+'_'+nameNoExt+'_400x400.'+ext;
+        var thumbUrl='';
+        try{
+          await new Promise(function(r){setTimeout(r,3000)});
+          thumbUrl=await storage.ref(thumbPath).getDownloadURL();
+        }catch(e){
+          try{
+            thumbPath='photos/'+ts+'_'+nameNoExt+'_400x400.webp';
+            thumbUrl=await storage.ref(thumbPath).getDownloadURL();
+          }catch(e2){thumbUrl='';}
+        }
+        await db.collection('photos').add({src:url,src_thumb:thumbUrl,title_he:name,title_en:name,cat:categories[0].v,class:'',order:photos.length+i});
       }catch(e){console.error('Upload error:',e);}
       done++;
       document.getElementById('aUPT').textContent='מעלה '+done+'/'+files.length;
@@ -649,6 +674,17 @@ window._updatePage = async function(id){
     document.getElementById('aPM').remove();
     await window.loadSiteData();document.getElementById('aP').remove();window.openAdmin();window._aT('pg');
   }catch(e){console.error(e);alert('שגיאה');}
+};
+
+
+window._dlPhoto = function(url){
+  var a=document.createElement('a');
+  a.href=url;
+  a.download='photo.jpg';
+  a.target='_blank';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
 };
 
 // ─── SCROLL & INIT ───
