@@ -1,165 +1,400 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YB Photos | Nature Photography</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700&family=Assistant:wght@300;400;600&display=swap" rel="stylesheet">
-    <style>
-        /* הגדרות עיצוב ופונטים חדשים */
-        :root {
-            --bg: #FAFAF8;
-            --accent: #2D5A3D;
-            --text: #1A1A18;
-        }
-        body { 
-            font-family: 'Heebo', sans-serif; 
-            background-color: var(--bg);
-            margin: 0;
-            color: var(--text);
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YB Photos | Nature Photography</title>
+<meta property="og:title" content="YB Photos | Nature Photography">
+<meta property="og:description" content="צילומי טבע מקצועיים">
+<meta property="og:image" content="">
+<meta property="og:type" content="website">
+<meta name="description" content="YB Photos - צילומי טבע מקצועיים">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Heebo:wght@200;300;400;500;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #FAFAF8; --bg-secondary: #F0EFEB; --text-primary: #1A1A18; --text-secondary: #6B6960;
+  --text-tertiary: #9E9A90; --accent: #2D5A3D; --accent-light: #6B9E7A; --border: #E2E0DA;
+  --white: #FFFFFF; --overlay: rgba(0,0,0,0.92); --shadow-soft: 0 2px 20px rgba(0,0,0,0.06);
+  --shadow-hover: 0 8px 40px rgba(0,0,0,0.12); --font-display-he: 'Heebo', sans-serif;
+  --font-display-en: 'Cormorant Garamond', serif; --font-body-he: 'Heebo', sans-serif;
+  --font-body-en: 'Libre Baskerville', serif; --transition: 0.4s cubic-bezier(0.25,0.1,0.25,1);
+}
+[data-theme="dark"] {
+  --bg: #121212; --bg-secondary: #1A1A1A; --text-primary: #E8E5DF; --text-secondary: #A8A49C;
+  --text-tertiary: #6B6960; --accent: #6B9E7A; --accent-light: #2D5A3D; --border: #2A2A28;
+  --white: #FFFFFF; --overlay: rgba(0,0,0,0.95); --shadow-soft: 0 2px 20px rgba(0,0,0,0.3);
+  --shadow-hover: 0 8px 40px rgba(0,0,0,0.4);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: var(--font-body-he); background: var(--bg); color: var(--text-primary); overflow-x:hidden; transition: background var(--transition), color var(--transition); }
 
-        /* אנימציית לחיצה */
-        button, .clickable { transition: transform 0.1s ease; }
-        button:active { transform: scale(0.95); }
+/* NAVIGATION */
+nav { position:fixed; top:0; left:0; right:0; z-index:1000; padding:1.2rem 3rem; display:flex; justify-content:space-between; align-items:center; transition: var(--transition); background:transparent; }
+nav.scrolled { background: rgba(250,250,248,0.95); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border-bottom:1px solid var(--border); }
+[data-theme="dark"] nav.scrolled { background: rgba(18,18,18,0.95); }
+.logo { font-family: var(--font-display-en); font-size:1.5rem; font-weight:300; letter-spacing:0.15em; color: var(--white); text-decoration:none; cursor:pointer; transition: transform 0.3s ease; }
+.logo:hover { transform: scale(1.05); }
+nav.scrolled .logo { color: var(--text-primary); }
+.nav-links { display:flex; gap:2rem; align-items:center; list-style:none; }
+.nav-links a { font-family: var(--font-body-en); font-size:0.85rem; color: rgba(255,255,255,0.85); text-decoration:none; letter-spacing:0.08em; text-transform:uppercase; transition: var(--transition); position:relative; }
+.nav-links a::after { content:''; position:absolute; bottom:-5px; left:0; width:0; height:1px; background:var(--accent-light); transition:0.3s; }
+.nav-links a:hover::after { width:100%; }
+nav.scrolled .nav-links a { color: var(--text-secondary); }
+.nav-links a:hover { color: var(--accent-light); }
 
-        /* אזור גרירת קבצים מעוצב */
-        .drop-zone {
-            border: 2px dashed #ccc;
-            padding: 40px;
-            text-align: center;
-            border-radius: 15px;
-            cursor: pointer;
-            background: #fff;
-            transition: all 0.3s;
-            margin-bottom: 20px;
-        }
-        .drop-zone.over {
-            border-color: var(--accent);
-            background: #f0f7f2;
-        }
+/* UI ELEMENTS */
+button { transition: transform 0.2s ease, background 0.3s ease, opacity 0.3s ease; cursor:pointer; border:none; background:none; }
+button:active { transform: scale(0.95); }
+.lang-toggle { padding:0.35rem 0.8rem; border:1px solid rgba(255,255,255,0.3); border-radius:4px; background:transparent; color: rgba(255,255,255,0.85); font-family: var(--font-body-he); font-size:0.8rem; }
+nav.scrolled .lang-toggle { border-color: var(--border); color: var(--text-secondary); }
+.dark-toggle { width:44px; height:22px; border-radius:11px; border:1px solid rgba(255,255,255,0.3); background:transparent; position:relative; }
+.dark-toggle::after { content:''; position:absolute; top:2px; left:2px; width:16px; height:16px; border-radius:50%; background:rgba(255,255,255,0.8); transition: var(--transition); }
+[data-theme="dark"] .dark-toggle { background: var(--accent); border-color: var(--accent); }
+[data-theme="dark"] .dark-toggle::after { left:24px; background: #fff; }
+/* HERO SECTION */
+.hero { min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:8rem 2rem 4rem; position:relative; overflow:hidden; background: #1a1a1a center/cover no-repeat; }
+.hero::before { content:''; position:absolute; inset:0; background:linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0.7) 100%); }
+.hero * { position:relative; z-index:1; }
+.hero-subtitle { font-family: var(--font-display-en); font-size:0.9rem; letter-spacing:0.3em; text-transform:uppercase; color:rgba(255,255,255,0.7); margin-bottom:1.5rem; }
+.hero h1 { font-family: var(--font-display-he); font-size:clamp(2.5rem,6vw,4.5rem); font-weight:300; color:#fff; letter-spacing:0.05em; line-height:1.15; margin-bottom:1.5rem; }
+.hero-desc { font-family: var(--font-body-he); font-size:1.1rem; color:rgba(255,255,255,0.75); max-width:600px; line-height:1.8; margin-bottom:2.5rem; }
+.hero-cta { display:inline-block; padding:0.8rem 2.5rem; border:1px solid rgba(255,255,255,0.4); color:#fff; text-decoration:none; font-family: var(--font-display-en); font-size:0.85rem; letter-spacing:0.2em; text-transform:uppercase; transition: var(--transition); }
+.hero-cta:hover { background:rgba(255,255,255,0.1); border-color:rgba(255,255,255,0.7); transform: translateY(-3px); }
 
-        /* כפתור הורדה משודרג */
-        .full-res-download {
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            background: var(--accent);
-            color: white;
-            padding: 15px 30px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: bold;
-            box-shadow: 0 4px 15px rgba(45, 90, 61, 0.3);
-            margin-top: 20px;
-        }
+/* GALLERY & FILTERS */
+section { padding:5rem 2rem; background: var(--bg); transition: background var(--transition); }
+.section-title { font-family: var(--font-display-he); font-size:2.2rem; font-weight:300; text-align:center; margin-bottom:3rem; letter-spacing:0.08em; color: var(--text-primary); }
+.filters { display:flex; justify-content:center; gap:2rem; margin-bottom:3rem; flex-wrap:wrap; }
+.filter-btn { background:none; border:none; font-family: var(--font-body-he); font-size:0.9rem; color: var(--text-secondary); padding:0.5rem 0; border-bottom:2px solid transparent; cursor:pointer; transition: 0.3s; }
+.filter-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
 
-        /* ספינר טעינה */
-        .spinner {
-            width: 18px; height: 18px;
-            border: 2px solid rgba(255,255,255,0.3);
-            border-top: 2px solid #fff;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            display: inline-block;
-            vertical-align: middle;
-            margin-left: 8px;
-        }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    </style>
+.gallery-grid { max-width:1400px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:1.5rem; }
+.gallery-item { position:relative; overflow:hidden; border-radius:8px; cursor:pointer; aspect-ratio:3/2; background:var(--bg-secondary); box-shadow: var(--shadow-soft); transition: var(--transition); }
+.gallery-item:hover { transform: translateY(-5px); box-shadow: var(--shadow-hover); }
+.gallery-item img { width:100%; height:100%; object-fit:cover; transition:transform 0.8s ease; }
+.gallery-item:hover img { transform:scale(1.1); }
+.gallery-overlay { position:absolute; inset:0; background:linear-gradient(to top,rgba(0,0,0,0.7) 0%,transparent 60%); opacity:0; transition: var(--transition); display:flex; align-items:flex-end; padding:1.5rem; }
+.gallery-item:hover .gallery-overlay { opacity:1; }
+.gallery-info h3 { color:#fff; font-family: var(--font-display-he); font-weight:400; font-size:1.1rem; }
+.gallery-info span { color:rgba(255,255,255,0.7); font-size:0.8rem; margin-top:4px; display:block; }
+
+/* LIGHTBOX */
+.lightbox { position:fixed; inset:0; background: var(--overlay); z-index:2000; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition: var(--transition); backdrop-filter: blur(10px); }
+.lightbox.active { opacity:1; pointer-events:all; }
+.lightbox img { max-width:90vw; max-height:80vh; object-fit:contain; box-shadow: 0 0 50px rgba(0,0,0,0.5); }
+.lightbox-close, .lightbox-prev, .lightbox-next { position:absolute; background:rgba(255,255,255,0.1); border:none; color:#fff; font-size:1.5rem; width:50px; height:50px; border-radius:50%; display:flex; align-items:center; justify-content:center; transition: var(--transition); cursor:pointer; }
+.lightbox-close { top:2rem; right:2rem; }
+.lightbox-prev { left:2rem; top:50%; transform:translateY(-50%); }
+.lightbox-next { right:2rem; top:50%; transform:translateY(-50%); }
+.lightbox-close:hover, .lightbox-prev:hover, .lightbox-next:hover { background:var(--accent); }
+
+.lightbox-download { position:absolute; bottom:4rem; left:50%; transform:translateX(-50%); display:inline-flex; align-items:center; gap:0.8rem; padding:1rem 2.5rem; background:var(--accent); color:#fff; border-radius:50px; font-family:var(--font-body-he); font-weight:500; text-decoration:none; box-shadow: 0 4px 15px rgba(45, 90, 61, 0.4); transition: 0.3s; }
+.lightbox-download:hover { background:var(--accent-light); transform:translateX(-50%) translateY(-3px); }
+/* ADMIN & MANAGEMENT UI */
+.admin-overlay { position:fixed; inset:0; background:var(--bg); z-index:5000; display:none; flex-direction:column; overflow-y:auto; }
+.admin-header { padding:1.5rem 3rem; background:var(--bg-secondary); border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:10; }
+.admin-nav { display:flex; gap:1.5rem; }
+.admin-nav-btn { padding:0.6rem 1.2rem; border-radius:6px; border:none; background:transparent; font-family:var(--font-body-he); font-weight:500; cursor:pointer; }
+.admin-nav-btn.active { background:var(--accent); color:#fff; }
+.admin-content { padding:3rem; max-width:1200px; margin:0 auto; width:100%; }
+
+.upload-zone { border:2px dashed var(--border); border-radius:12px; padding:3rem; text-align:center; transition:var(--transition); background:var(--bg-secondary); cursor:pointer; margin-bottom:2rem; }
+.upload-zone.dragover { border-color:var(--accent); background:rgba(45, 90, 61, 0.05); }
+
+.spinner { width:20px; height:20px; border:3px solid rgba(255,255,255,0.3); border-top-color:#fff; border-radius:50%; animation: spin 0.8s linear infinite; display:none; margin-right:10px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+footer { padding:4rem 2rem; text-align:center; border-top:1px solid var(--border); background: var(--bg-secondary); }
+.page-loader { position:fixed; inset:0; background: var(--bg); z-index:9999; display:flex; align-items:center; justify-content:center; }
+.page-loader.done { opacity:0; pointer-events:none; transition:0.8s; }
+</style>
 </head>
 <body>
 
-    <script>
-    // לוגיקת הוספת קטגוריה חדשה תוך כדי תנועה
-    function checkNewCategory(select) {
-        if (select.value === 'ADD_NEW') {
-            const newName = prompt("הזן שם לקטגוריה החדשה:");
-            if (newName && newName.trim() !== "") {
-                const opt = document.createElement('option');
-                opt.value = newName;
-                opt.text = newName;
-                select.add(opt, select.options[select.options.length - 1]);
-                select.value = newName;
-            } else {
-                select.selectedIndex = 0;
-            }
-        }
-    }
+<div class="page-loader" id="pageLoader"><span style="font-size:2rem; color:var(--accent);">●</span></div>
 
-    // פונקציית העלאה משולבת עם התוסף והלואדר
-    window._upload = async function() {
-        const fileInput = document.getElementById('fileInput');
-        const catSelect = document.getElementById('photoCat');
-        const btn = document.getElementById('uploadBtn');
-        
-        if (!fileInput.files[0]) return alert('בחר קובץ');
-        
-        // שלב 6: חיווי טעינה
-        const originalText = btn.innerHTML;
-        btn.disabled = true;
-        btn.innerHTML = '<span class="spinner"></span> שומר תמונה...';
+<div class="auth-overlay" id="authOverlay" style="position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:10000; display:none; align-items:center; justify-content:center;">
+  <div style="background:var(--bg); padding:3rem; border-radius:15px; width:100%; max-width:400px; text-align:center;">
+    <h3 style="margin-bottom:2rem;">כניסת מנהל</h3>
+    <input type="email" id="authEmail" placeholder="אימייל" style="width:100%; padding:12px; margin-bottom:1rem; border:1px solid var(--border); border-radius:8px;">
+    <input type="password" id="authPass" placeholder="סיסמה" style="width:100%; padding:12px; margin-bottom:1.5rem; border:1px solid var(--border); border-radius:8px;">
+    <button onclick="doLogin()" style="width:100%; padding:12px; background:var(--accent); color:#fff; border:none; border-radius:8px; font-weight:600; cursor:pointer;">התחברות</button>
+    <button onclick="hideAuth()" style="background:none; border:none; margin-top:1rem; color:var(--text-tertiary); cursor:pointer;">ביטול</button>
+  </div>
+</div>
 
-        const file = fileInput.files[0];
-        const storageRef = storage.ref('photos/' + Date.now() + '_' + file.name);
+<nav id="navbar">
+  <div class="logo" id="siteLogo">YB Photos</div>
+  <ul class="nav-links">
+    <li><a href="#gallery" data-he="גלריה" data-en="Gallery">Gallery</a></li>
+    <li><a href="#about" data-he="אודות" data-en="About">About</a></li>
+    <li><button class="lang-toggle" id="langToggle">עברית</button></li>
+    <li><button class="dark-toggle" id="darkToggle"></button></li>
+  </ul>
+</nav>
 
-        try {
-            const snapshot = await storageRef.put(file);
-            const url = await snapshot.ref.getDownloadURL();
+<section class="hero" id="heroSection">
+  <span class="hero-subtitle" data-he="צילום טבע מקצועי" data-en="Professional Nature Photography">Professional Nature Photography</span>
+  <h1 data-he="היופי שבטבע" data-en="The Beauty of Nature">The Beauty of Nature</h1>
+  <p class="hero-desc" data-he="רגעים נצחיים מהטבע הפראי שנתפסו בעדשה מקצועית" data-en="Eternal moments from the wild captured through a professional lens">Eternal moments from the wild</p>
+  <a href="#gallery" class="hero-cta" data-he="לגלריה המלאה" data-en="View Gallery">View Gallery</a>
+</section>
 
-            // שלב 1: המתנה לתוסף (Thumbnail)
-            const extension = file.name.split('.').pop();
-            const thumbName = file.name.replace('.' + extension, '_400x400.' + extension);
-            const thumbPath = 'photos/' + storageRef.name.split('_')[0] + '_' + thumbName;
+<section id="gallery">
+  <h2 class="section-title" data-he="גלריה" data-en="Gallery">Gallery</h2>
+  <div class="filters" id="filtersContainer"></div>
+  <div class="gallery-grid" id="galleryGrid"></div>
+</section>
 
-            // מחכים 3 שניות ליצירת הגרסה המוקטנת
-            setTimeout(async () => {
-                let thumbUrl = url;
-                try {
-                    thumbUrl = await storage.ref(thumbPath).getDownloadURL();
-                } catch(e) { console.log("Thumbnail still processing..."); }
+<footer id="footer">
+  <p data-he="© 2026 YB Studio. כל הזכויות שמורות." data-en="© 2026 YB Studio. All rights reserved.">© 2026 YB Studio. All rights reserved.</p>
+</footer>
 
-                await db.collection('photos').add({
-                    src: url,
-                    src_thumb: thumbUrl,
-                    category: catSelect.value,
-                    timestamp: Date.now()
-                });
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close">✕</button>
+  <button class="lightbox-prev">❮</button>
+  <button class="lightbox-next">❯</button>
+  <img id="lightboxImg" src="">
+  <div style="position:absolute; bottom:10rem; color:#fff; text-align:center; width:100%;">
+    <h3 id="lightboxTitle"></h3>
+    <span id="lightboxCat"></span>
+  </div>
+  <a id="lightboxDownload" class="lightbox-download" href="" download>
+    <span>⬇ הורדה באיכות מלאה</span>
+  </a>
+</div>
 
-                btn.disabled = false;
-                btn.innerHTML = originalText;
-                alert('הועלה בהצלחה!');
-                location.reload();
-            }, 3500);
+<div class="admin-overlay" id="adminOverlay">
+  <div class="admin-header">
+    <h2>ניהול אתר</h2>
+    <div class="admin-nav">
+      <button class="admin-nav-btn active" onclick="_aT('ph')">תמונות</button>
+    </div>
+    <button onclick="logout()">התנתק</button>
+  </div>
+  <div class="admin-content" id="adminContent">
+    <div id="tab-ph">
+      <div class="upload-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+        <span>+</span>
+        <p>גרור לכאן תמונות או לחץ לבחירה</p>
+        <input type="file" id="fileInput" hidden multiple accept="image/*" onchange="handleFiles(this.files)">
+      </div>
+      <div id="uploadStatus"></div>
+      <div id="adminPhotosGrid" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:1rem;"></div>
+    </div>
+  </div>
+  <button onclick="document.getElementById('adminOverlay').style.display='none'" style="position:fixed; bottom:2rem; left:2rem; padding:1rem; border-radius:50%; background:#333; color:#fff; cursor:pointer;">✕</button>
+</div>
 
-        } catch (error) {
-            console.error(error);
-            btn.disabled = false;
-            btn.innerHTML = originalText;
-        }
-    };
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 
-    // הגדרת גרירת קבצים
-    function initDropZone() {
-        const zone = document.getElementById('dropZone');
-        if (!zone) return;
-        zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.classList.add('over'); });
-        zone.addEventListener('dragleave', () => zone.classList.remove('over'));
-        zone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            zone.classList.remove('over');
-            document.getElementById('fileInput').files = e.dataTransfer.files;
-            zone.innerHTML = 'קובץ נבחר: ' + e.dataTransfer.files[0].name;
-        });
-    }
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyAFxcN1h3y9bSlVZH-jORHPxtBG8ljHRw8",
+  authDomain: "yb-studio-62e4c.firebaseapp.com",
+  projectId: "yb-studio-62e4c",
+  storageBucket: "yb-studio-62e4c.firebasestorage.app",
+  messagingSenderId: "126783803942",
+  appId: "1:126783803942:web:7e780931f64e2e25c7cce7"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore(), storage = firebase.storage(), auth = firebase.auth();
+let photos = [], categories = [], currentLang = 'he', currentFilter = 'all';
+// --- INITIALIZATION & DATA FETCHING ---
+async function loadSiteData() {
+  const sDoc = await db.collection('settings').doc('main').get();
+  if (sDoc.exists) {
+    const d = sDoc.data();
+    categories = d.categories || [];
+    if (d.heroImage) document.getElementById('heroSection').style.backgroundImage = `url(${d.heroImage})`;
+  } else {
+    // Default categories if none exist in DB
+    categories = [
+      { v: 'landscape', he: 'נופים', en: 'Landscapes' },
+      { v: 'wildlife', he: 'בעלי חיים', en: 'Wildlife' },
+      { v: 'macro', he: 'מאקרו', en: 'Macro' }
+    ];
+  }
 
-    // עדכון שנה וקרדיט אוטומטי
-    document.addEventListener('DOMContentLoaded', () => {
-        const footer = document.querySelector('footer p');
-        if (footer) footer.innerHTML = '© כל הזכויות שמורות ל-YB Studio 2026';
-        initDropZone();
+  const pSnap = await db.collection('photos').orderBy('order', 'desc').get();
+  photos = pSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  
+  renderFilters();
+  renderGallery();
+  document.getElementById('pageLoader').classList.add('done');
+}
+
+// --- RENDER FUNCTIONS ---
+function renderFilters() {
+  const container = document.getElementById('filtersContainer');
+  let html = `<button class="filter-btn ${currentFilter === 'all' ? 'active' : ''}" onclick="setFilter('all')">${currentLang === 'he' ? 'הכל' : 'All'}</button>`;
+  
+  categories.forEach(cat => {
+    html += `<button class="filter-btn ${currentFilter === cat.v ? 'active' : ''}" onclick="setFilter('${cat.v}')">${currentLang === 'he' ? cat.he : cat.en}</button>`;
+  });
+  container.innerHTML = html;
+}
+
+function renderGallery() {
+  const grid = document.getElementById('galleryGrid');
+  grid.innerHTML = '';
+  
+  const filtered = currentFilter === 'all' ? photos : photos.filter(p => p.cat === currentFilter);
+  
+  filtered.forEach((p, index) => {
+    const item = document.createElement('div');
+    item.className = 'gallery-item';
+    item.innerHTML = `
+      <img src="${p.src}" alt="${p.title_en}" loading="lazy">
+      <div class="gallery-overlay">
+        <div class="gallery-info">
+          <h3>${currentLang === 'he' ? p.title_he : p.title_en}</h3>
+          <span>${getCatName(p.cat)}</span>
+        </div>
+      </div>
+    `;
+    item.onclick = () => openLightbox(index, filtered);
+    grid.appendChild(item);
+  });
+}
+
+function getCatName(val) {
+  const c = categories.find(x => x.v === val);
+  if (!c) return '';
+  return currentLang === 'he' ? c.he : c.en;
+}
+
+function setFilter(v) {
+  currentFilter = v;
+  renderFilters();
+  renderGallery();
+}
+
+// --- LIGHTBOX LOGIC ---
+let lbIndex = 0, lbList = [];
+function openLightbox(index, list) {
+  lbIndex = index;
+  lbList = list;
+  updateLightbox();
+  document.getElementById('lightbox').classList.add('active');
+}
+
+function updateLightbox() {
+  const p = lbList[lbIndex];
+  const img = document.getElementById('lightboxImg');
+  img.style.opacity = '0';
+  setTimeout(() => {
+    img.src = p.src;
+    document.getElementById('lightboxTitle').innerText = currentLang === 'he' ? p.title_he : p.title_en;
+    document.getElementById('lightboxCat').innerText = getCatName(p.cat);
+    document.getElementById('lightboxDownload').href = p.src;
+    img.style.opacity = '1';
+  }, 200);
+}
+
+document.querySelector('.lightbox-next').onclick = (e) => { e.stopPropagation(); lbIndex = (lbIndex + 1) % lbList.length; updateLightbox(); };
+document.querySelector('.lightbox-prev').onclick = (e) => { e.stopPropagation(); lbIndex = (lbIndex - 1 + lbList.length) % lbList.length; updateLightbox(); };
+document.querySelector('.lightbox-close').onclick = () => document.getElementById('lightbox').classList.remove('active');
+
+// --- ADMIN & AUTH ---
+let clickCount = 0, clickTimer;
+document.getElementById('siteLogo').onclick = () => {
+  clickCount++;
+  clearTimeout(clickTimer);
+  clickTimer = setTimeout(() => {
+    if (clickCount >= 5) document.getElementById('authOverlay').style.display = 'flex';
+    clickCount = 0;
+  }, 500);
+};
+
+function hideAuth() { document.getElementById('authOverlay').style.display = 'none'; }
+
+async function doLogin() {
+  const email = document.getElementById('authEmail').value;
+  const pass = document.getElementById('authPass').value;
+  try {
+    await auth.signInWithEmailAndPassword(email, pass);
+    document.getElementById('authOverlay').style.display = 'none';
+    openAdmin();
+  } catch (e) { alert("פרטים שגויים"); }
+}
+
+function openAdmin() {
+  document.getElementById('adminOverlay').style.display = 'flex';
+  renderAdminPhotos();
+}
+
+async function handleFiles(files) {
+  const status = document.getElementById('uploadStatus');
+  for (let file of files) {
+    status.innerHTML = `מעלה: ${file.name}...`;
+    const ref = storage.ref(`gallery/${Date.now()}_${file.name}`);
+    await ref.put(file);
+    const url = await ref.getDownloadURL();
+    
+    await db.collection('photos').add({
+      src: url,
+      cat: 'landscape',
+      title_he: 'תמונה חדשה',
+      title_en: 'New Photo',
+      order: Date.now()
     });
+  }
+  status.innerHTML = 'העלאה הושלמה!';
+  await loadSiteData();
+  renderAdminPhotos();
+}
+
+function renderAdminPhotos() {
+  const container = document.getElementById('adminPhotosGrid');
+  container.innerHTML = '';
+  photos.forEach(p => {
+    const d = document.createElement('div');
+    d.style.position = 'relative';
+    d.innerHTML = `
+      <img src="${p.src}" style="width:100%; height:100px; object-fit:cover; border-radius:4px;">
+      <button onclick="deletePhoto('${p.id}')" style="position:absolute; top:5px; right:5px; background:red; color:white; border-radius:50%; width:25px; height:25px; font-size:12px;">✕</button>
+    `;
+    container.appendChild(d);
+  });
+}
+
+async function deletePhoto(id) {
+  if (confirm("למחוק תמונה זו?")) {
+    await db.collection('photos').doc(id).delete();
+    await loadSiteData();
+    renderAdminPhotos();
+  }
+}
+
+// --- LANGUAGE & THEME ---
+document.getElementById('langToggle').onclick = function() {
+  currentLang = currentLang === 'he' ? 'en' : 'he';
+  this.innerText = currentLang === 'he' ? 'EN' : 'עברית';
+  document.documentElement.dir = currentLang === 'he' ? 'rtl' : 'ltr';
+  document.querySelectorAll('[data-he]').forEach(el => {
+    el.innerText = currentLang === 'he' ? el.getAttribute('data-he') : el.getAttribute('data-en');
+  });
+  renderFilters();
+  renderGallery();
+};
+
+document.getElementById('darkToggle').onclick = () => {
+  const theme = document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  document.body.setAttribute('data-theme', theme);
+};
+
+window.onscroll = () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+};
+
+// Initial Load
+loadSiteData();
+
 </script>
 </body>
 </html>
