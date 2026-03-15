@@ -10,7 +10,7 @@
 <meta property="og:type" content="website">
 <meta name="description" content="YB Photos - צילומי טבע מקצועיים">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Heebo:wght@200;300;400;500;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Heebo:wght@200;300;400;500;700&family=Assistant:wght@200;300;400;600;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <style>
 :root {
   --bg: #FAFAF8; --bg-secondary: #F0EFEB; --text-primary: #1A1A18; --text-secondary: #6B6960;
@@ -116,10 +116,27 @@ section { padding:5rem 2rem; background: var(--bg); transition: background var(-
 .lightbox-info { position:absolute; bottom:2rem; text-align:center; width:100%; }
 .lightbox-info h3 { color:#fff; font-family: var(--font-display-en); font-weight:300; }
 
-.lightbox-download { position:absolute; bottom:5rem; left:50%; transform:translateX(-50%); display:inline-flex; align-items:center; gap:0.5rem; padding:0.6rem 1.5rem; background:var(--accent); color:#fff; border:none; border-radius:8px; cursor:pointer; font-family:var(--font-body-he); font-size:0.85rem; letter-spacing:0.05em; transition:var(--transition); text-decoration:none; z-index:1; }
-.lightbox-download:hover { background:var(--accent-light); transform:translateX(-50%) scale(1.05); }
-.gallery-download { position:absolute; bottom:0.8rem; left:0.8rem; padding:0.3rem 0.7rem; background:rgba(0,0,0,0.6); color:#fff; border:none; border-radius:4px; cursor:pointer; font-size:0.7rem; font-family:var(--font-body-he); opacity:0; transition:var(--transition); z-index:2; }
+/* BUTTON PRESS ANIMATION */
+button, .hero-cta { transition: transform 0.15s ease, background 0.3s ease, color 0.3s ease, border 0.3s ease, opacity 0.3s ease; }
+button:active, .hero-cta:active { transform: scale(0.95) !important; }
+
+/* DOWNLOAD BUTTON IN LIGHTBOX */
+.lightbox-download { position:absolute; bottom:4.5rem; left:50%; transform:translateX(-50%); display:inline-flex; align-items:center; gap:0.6rem; padding:0.8rem 2.5rem; background:var(--accent); color:#fff; border:none; border-radius:10px; cursor:pointer; font-family:'Assistant',var(--font-body-he); font-size:0.95rem; font-weight:600; letter-spacing:0.03em; transition:all 0.3s ease; text-decoration:none; z-index:1; box-shadow:0 4px 15px rgba(45,90,61,0.4); }
+.lightbox-download:hover { background:var(--accent-light); transform:translateX(-50%) scale(1.05); box-shadow:0 6px 25px rgba(45,90,61,0.5); }
+
+/* SMALL DOWNLOAD ON GALLERY ITEM */
+.gallery-download { position:absolute; bottom:0.8rem; left:0.8rem; padding:0.35rem 0.7rem; background:rgba(0,0,0,0.65); color:#fff; border:none; border-radius:5px; cursor:pointer; font-size:0.7rem; font-family:'Assistant',var(--font-body-he); opacity:0; transition:var(--transition); z-index:2; backdrop-filter:blur(4px); }
 .gallery-item:hover .gallery-download { opacity:1; }
+
+/* SPINNER */
+.spinner { display:inline-block; width:16px; height:16px; border:2px solid rgba(255,255,255,0.3); border-top-color:#fff; border-radius:50%; animation:spin 0.6s linear infinite; vertical-align:middle; margin-left:6px; }
+@keyframes spin { to{transform:rotate(360deg);} }
+
+/* DRAG & DROP ZONE */
+.drop-zone { border:2px dashed #444; border-radius:12px; padding:2.5rem 1.5rem; text-align:center; cursor:pointer; transition:all 0.3s ease; margin-bottom:1rem; background:#1a1a1a; }
+.drop-zone:hover, .drop-zone.drag-over { border-color:#6B9E7A; background:#1a2a1f; }
+.drop-zone-text { color:#888; font-size:0.9rem; font-family:'Assistant','Heebo',sans-serif; }
+.drop-zone-icon { font-size:2rem; margin-bottom:0.5rem; display:block; opacity:0.5; }
 
 .lightbox-info span { color:rgba(255,255,255,0.6); font-size:0.8rem; }
 
@@ -213,7 +230,7 @@ footer { padding:2rem; text-align:center; font-size:0.75rem; color: var(--text-t
 </section>
 
 <footer>
-  <p data-he="© 2024 YB Photos. כל הזכויות שמורות." data-en="© 2024 YB Photos. All rights reserved.">© 2024 YB Photos. All rights reserved.</p>
+  <p data-he="© כל הזכויות שמורות ל-YB Studio 2026" data-en="© All rights reserved to YB Studio 2026">© All rights reserved to YB Studio 2026</p>
 </footer>
 
 <div class="lightbox" id="lightbox">
@@ -328,8 +345,8 @@ function buildGallery() {
     var catName = currentLang === 'he' ? (cm[photo.cat]?cm[photo.cat].he:photo.cat) : (cm[photo.cat]?cm[photo.cat].en:photo.cat);
     var item = document.createElement('div');
     item.className = 'gallery-item' + (photo.class ? ' ' + photo.class : '');
-    var thumbSrc = photo.src_thumb || photo.src;
-    item.innerHTML = '<img src="'+thumbSrc+'" alt="'+(currentLang==='he'?photo.title_he:photo.title_en)+'" loading="lazy"><div class="gallery-overlay"><div class="gallery-info"><h3>'+(currentLang==='he'?photo.title_he:photo.title_en)+'</h3><span>'+catName+'</span></div></div><button class="gallery-download" onclick="event.stopPropagation();window._dlPhoto(\''+photo.src+'\')">⬇</button>';
+    var thumbSrc=photo.src_thumb||photo.src;
+    item.innerHTML='<img src="'+thumbSrc+'" alt="'+(currentLang==='he'?photo.title_he:photo.title_en)+'" loading="lazy"><div class="gallery-overlay"><div class="gallery-info"><h3>'+(currentLang==='he'?photo.title_he:photo.title_en)+'</h3><span>'+catName+'</span></div></div><button class="gallery-download" onclick="event.stopPropagation();window._dlPhoto(\''+photo.src+'\')">⬇</button>';
     item.addEventListener('click', function(){ openLightbox(index); });
     grid.appendChild(item);
   });
@@ -373,8 +390,8 @@ function openLightbox(i) { lightboxIndex=i; updateLightbox(); lightbox.classList
 function updateLightbox() {
   var p=visiblePhotos[lightboxIndex]; if(!p)return;
   lightboxImg.src=p.src; lightboxTitle.textContent=currentLang==='he'?p.title_he:p.title_en;
-  document.getElementById('lightboxDownload').href=p.src;
-  document.getElementById('lightboxDownload').download=(currentLang==='he'?p.title_he:p.title_en)+'.jpg';
+  var dlBtn=document.getElementById('lightboxDownload');
+  if(dlBtn){dlBtn.href=p.src;dlBtn.download=(currentLang==='he'?p.title_he:p.title_en)+'.jpg';}
   var cm={}; categories.forEach(function(c){cm[c.v]=c;});
   lightboxCat.textContent=currentLang==='he'?(cm[p.cat]?cm[p.cat].he:p.cat):(cm[p.cat]?cm[p.cat].en:p.cat);
 }
@@ -504,54 +521,113 @@ window._aT = function(t){['ph','tx','ct','cl','bg','ca','st','pg'].forEach(funct
 window._addPhoto = function(){
   var m=document.createElement('div');m.id='aUM';
   m.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:10001;display:flex;align-items:center;justify-content:center;';
-  m.innerHTML='<div style="background:#1a1a1a;border-radius:12px;padding:2rem;width:320px;text-align:center;direction:rtl;"><h3 style="font-family:Heebo,sans-serif;font-weight:300;font-size:1.1rem;margin-bottom:1.5rem;color:#e8e5df;">הוספת תמונות</h3><button onclick="window._upload(false)" style="width:100%;padding:0.8rem;background:#2D5A3D;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:0.9rem;margin-bottom:0.8rem;">תמונה אחת או כמה</button><button onclick="window._upload(true)" style="width:100%;padding:0.8rem;background:#2D5A3D;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:0.9rem;margin-bottom:0.8rem;">תיקייה שלמה</button><button onclick="document.getElementById(\'aUM\').remove()" style="width:100%;padding:0.6rem;background:#333;color:#aaa;border:none;border-radius:8px;cursor:pointer;font-size:0.8rem;">ביטול</button></div>';
+  // Build category options including "new category"
+  var catOpts='';
+  categories.forEach(function(c){catOpts+='<option value="'+c.v+'">'+c.he+'</option>';});
+  catOpts+='<option value="__new__">+ קטגוריה חדשה</option>';
+  m.innerHTML='<div style="background:#1a1a1a;border-radius:12px;padding:2rem;width:380px;direction:rtl;max-height:90vh;overflow-y:auto;">'
+    +'<h3 style="font-family:Assistant,Heebo,sans-serif;font-weight:300;font-size:1.1rem;margin-bottom:1rem;color:#e8e5df;">הוספת תמונות</h3>'
+    +'<div id="dropZone" class="drop-zone"><span class="drop-zone-icon">📁</span><span class="drop-zone-text">גרור תמונות לכאן<br>או לחץ לבחירה</span><input type="file" id="dropInput" accept="image/*" multiple style="display:none;"></div>'
+    +'<div style="display:flex;gap:0.5rem;margin-bottom:1rem;"><button onclick="window._triggerUpload(false)" style="flex:1;padding:0.6rem;background:#2D5A3D;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:0.8rem;">בחר תמונות</button><button onclick="window._triggerUpload(true)" style="flex:1;padding:0.6rem;background:#2D5A3D;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:0.8rem;">בחר תיקייה</button></div>'
+    +'<div style="margin-bottom:1rem;"><label style="font-size:0.8rem;color:#6B9E7A;display:block;margin-bottom:4px;">קטגוריה לתמונות</label><select id="uploadCat" onchange="if(this.value===\'__new__\')window._newCatInline()" style="width:100%;padding:6px;border:1px solid #333;border-radius:6px;background:#222;color:#fff;font-size:0.85rem;">'+catOpts+'</select><div id="newCatFields" style="display:none;margin-top:0.5rem;"><input id="ncHe" placeholder="שם בעברית" style="width:100%;padding:5px;border:1px solid #333;border-radius:4px;background:#222;color:#fff;margin-bottom:4px;direction:rtl;font-size:0.8rem;"><input id="ncEn" placeholder="English name" style="width:100%;padding:5px;border:1px solid #333;border-radius:4px;background:#222;color:#fff;direction:ltr;font-size:0.8rem;"></div></div>'
+    +'<div id="uploadPreview" style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:1rem;"></div>'
+    +'<button id="uploadBtn" onclick="window._doUpload()" style="width:100%;padding:0.7rem;background:#2D5A3D;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:0.9rem;display:none;">העלה תמונות</button>'
+    +'<button onclick="document.getElementById(\'aUM\').remove()" style="width:100%;padding:0.5rem;background:#333;color:#aaa;border:none;border-radius:8px;cursor:pointer;font-size:0.8rem;margin-top:0.5rem;">ביטול</button></div>';
   document.body.appendChild(m);
+  // Setup drag & drop
+  var dz=document.getElementById('dropZone');
+  var di=document.getElementById('dropInput');
+  dz.addEventListener('click',function(){di.click();});
+  dz.addEventListener('dragover',function(e){e.preventDefault();dz.classList.add('drag-over');});
+  dz.addEventListener('dragleave',function(){dz.classList.remove('drag-over');});
+  dz.addEventListener('drop',function(e){e.preventDefault();dz.classList.remove('drag-over');window._previewFiles(e.dataTransfer.files);});
+  di.addEventListener('change',function(){window._previewFiles(di.files);});
 };
 
-window._upload = function(isFolder){
-  document.getElementById('aUM').remove();
+window._pendingFiles=[];
+
+window._triggerUpload=function(isFolder){
   var inp=document.createElement('input');inp.type='file';inp.accept='image/*';
-  if(isFolder){inp.webkitdirectory=true;}else{inp.multiple=true;}
-  inp.onchange=async function(){
-    var files=Array.from(inp.files).filter(function(f){return f.type.startsWith('image/');});
-    if(!files.length)return;
-    var prog=document.createElement('div');prog.id='aUP';
-    prog.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:10001;display:flex;align-items:center;justify-content:center;';
-    prog.innerHTML='<div style="background:#1a1a1a;border-radius:12px;padding:2rem;width:300px;text-align:center;direction:rtl;"><p id="aUPT" style="color:#e8e5df;font-size:0.9rem;">מעלה 0/'+files.length+'</p><div style="background:#333;border-radius:4px;height:8px;margin-top:1rem;"><div id="aUPB" style="background:#2D5A3D;border-radius:4px;height:100%;width:0%;transition:width 0.3s;"></div></div></div>';
-    document.body.appendChild(prog);
-    var done=0;
-    for(var i=0;i<files.length;i++){
-      var file=files[i];
-      try{
-        var ts=Date.now();
-        var cleanName=file.name.replace(/[^a-zA-Z0-9.]/g,'_');
-        var storageRef=storage.ref('photos/'+ts+'_'+cleanName);
-        await storageRef.put(file);
-        var url=await storageRef.getDownloadURL();
-        var name=file.name.replace(/\.[^.]+$/,'').replace(/[-_]/g,' ');
-        var nameNoExt=cleanName.replace(/\.[^.]+$/,'');
-        var ext=cleanName.split('.').pop();
-        var thumbPath='photos/'+ts+'_'+nameNoExt+'_400x400.'+ext;
-        var thumbUrl='';
-        try{
-          await new Promise(function(r){setTimeout(r,3000)});
-          thumbUrl=await storage.ref(thumbPath).getDownloadURL();
-        }catch(e){
-          try{
-            thumbPath='photos/'+ts+'_'+nameNoExt+'_400x400.webp';
-            thumbUrl=await storage.ref(thumbPath).getDownloadURL();
-          }catch(e2){thumbUrl='';}
-        }
-        await db.collection('photos').add({src:url,src_thumb:thumbUrl,title_he:name,title_en:name,cat:categories[0].v,class:'',order:photos.length+i});
-      }catch(e){console.error('Upload error:',e);}
-      done++;
-      document.getElementById('aUPT').textContent='מעלה '+done+'/'+files.length;
-      document.getElementById('aUPB').style.width=Math.round(done/files.length*100)+'%';
-    }
-    setTimeout(async function(){document.getElementById('aUP').remove();await window.loadSiteData();document.getElementById('aP').remove();window.openAdmin();},500);
-  };
+  if(isFolder)inp.webkitdirectory=true; else inp.multiple=true;
+  inp.onchange=function(){window._previewFiles(inp.files);};
   inp.click();
 };
+
+window._previewFiles=function(fileList){
+  var files=Array.from(fileList).filter(function(f){return f.type.startsWith('image/');});
+  if(!files.length)return;
+  window._pendingFiles=window._pendingFiles.concat(files);
+  var prev=document.getElementById('uploadPreview');
+  files.forEach(function(f){
+    var reader=new FileReader();
+    reader.onload=function(e){
+      prev.innerHTML+='<div style="width:60px;height:60px;border-radius:4px;overflow:hidden;"><img src="'+e.target.result+'" style="width:100%;height:100%;object-fit:cover;"></div>';
+    };
+    reader.readAsDataURL(f);
+  });
+  document.getElementById('uploadBtn').style.display='block';
+  document.getElementById('uploadBtn').textContent='העלה '+window._pendingFiles.length+' תמונות';
+};
+
+window._newCatInline=function(){
+  document.getElementById('newCatFields').style.display='block';
+};
+
+window._doUpload=async function(){
+  var files=window._pendingFiles;
+  if(!files.length)return;
+  // Handle new category
+  var catVal=document.getElementById('uploadCat').value;
+  if(catVal==='__new__'){
+    var nhe=document.getElementById('ncHe').value;
+    var nen=document.getElementById('ncEn').value;
+    if(!nhe||!nen){alert('מלא שם קטגוריה');return;}
+    var nv=nen.toLowerCase().replace(/[^a-z0-9]/g,'');
+    categories.push({v:nv,he:nhe,en:nen});
+    catVal=nv;
+    // Save categories to settings
+    try{
+      var settingsDoc=await db.collection('settings').doc('main').get();
+      var s=settingsDoc.exists?settingsDoc.data():{};
+      s.categories=categories;
+      await db.collection('settings').doc('main').set(s);
+    }catch(e){console.error(e);}
+  }
+  var btn=document.getElementById('uploadBtn');
+  btn.innerHTML='<span class="spinner"></span> מעלה...';
+  btn.disabled=true;
+  document.getElementById('aUM').querySelector('[onclick*="remove"]').style.display='none';
+  for(var i=0;i<files.length;i++){
+    var file=files[i];
+    btn.innerHTML='<span class="spinner"></span> מעלה '+(i+1)+'/'+files.length;
+    try{
+      var ts=Date.now();
+      var cleanName=file.name.replace(/[^a-zA-Z0-9.]/g,'_');
+      var storageRef=storage.ref('photos/'+ts+'_'+cleanName);
+      await storageRef.put(file);
+      var url=await storageRef.getDownloadURL();
+      var name=file.name.replace(/\.[^.]+$/,'').replace(/[-_]/g,' ');
+      var nameNoExt=cleanName.replace(/\.[^.]+$/,'');
+      var ext=cleanName.split('.').pop();
+      var thumbPath='photos/'+ts+'_'+nameNoExt+'_400x400.'+ext;
+      var thumbUrl='';
+      try{
+        await new Promise(function(r){setTimeout(r,3000)});
+        thumbUrl=await storage.ref(thumbPath).getDownloadURL();
+      }catch(e){
+        try{thumbUrl=await storage.ref('photos/'+ts+'_'+nameNoExt+'_400x400.webp').getDownloadURL();}catch(e2){thumbUrl='';}
+      }
+      var cm={};categories.forEach(function(c){cm[c.v]=c;});
+      await db.collection('photos').add({src:url,src_thumb:thumbUrl,title_he:name,title_en:name,cat:catVal,cat_he:cm[catVal]?cm[catVal].he:catVal,cat_en:cm[catVal]?cm[catVal].en:catVal,class:'',order:photos.length+i});
+    }catch(e){console.error('Upload error:',e);}
+  }
+  window._pendingFiles=[];
+  document.getElementById('aUM').remove();
+  await window.loadSiteData();
+  if(document.getElementById('aP')){document.getElementById('aP').remove();window.openAdmin();}
+};
+
+;
 
 window._delPhoto = async function(id){
   if(!confirm('למחוק תמונה?'))return;
@@ -674,17 +750,6 @@ window._updatePage = async function(id){
     document.getElementById('aPM').remove();
     await window.loadSiteData();document.getElementById('aP').remove();window.openAdmin();window._aT('pg');
   }catch(e){console.error(e);alert('שגיאה');}
-};
-
-
-window._dlPhoto = function(url){
-  var a=document.createElement('a');
-  a.href=url;
-  a.download='photo.jpg';
-  a.target='_blank';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
 };
 
 // ─── SCROLL & INIT ───
